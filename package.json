@@ -1,0 +1,63 @@
+{
+	"name": "kazari",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"@headlessui/react": "^1.7.3",
+		"@heroicons/react": "^1.0.6",
+		"@tailwindcss/forms": "^0.5.3",
+		"@testing-library/jest-dom": "^5.16.5",
+		"@testing-library/react": "^13.4.0",
+		"@testing-library/user-event": "^13.5.0",
+		"axios": "^1.1.2",
+		"env-cmd": "^10.1.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-error-boundary": "^3.1.4",
+		"react-icons": "^4.6.0",
+		"react-infinite-scroll-component": "^6.1.0",
+		"react-jwt": "^1.1.7",
+		"react-redux": "^8.0.4",
+		"react-responsive-carousel": "^3.2.23",
+		"react-router-dom": "^6.4.2",
+		"react-scripts": "5.0.1",
+		"react-toastify": "^9.0.8",
+		"redux": "^4.2.0",
+		"redux-thunk": "^2.4.1",
+		"tailwind-scrollbar": "^2.1.0-preview.0",
+		"web-vitals": "^2.1.4"
+	},
+	"scripts": {
+		"dev-start": "env-cmd -e DEV react-scripts start",
+		"dev-build": "env-cmd -e DEV react-scripts build",
+		"prod-start": "env-cmd -e PROD react-scripts start",
+		"prod-build": "env-cmd -e PROD react-scripts build",
+		"local-start": "env-cmd -e LOCAL react-scripts start",
+		"local-build": "env-cmd -e LOCAL react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"autoprefixer": "^10.4.12",
+		"postcss": "^8.4.18",
+		"tailwindcss": "^3.1.8"
+	}
+}
