@@ -25,7 +25,7 @@ function CheckDelivery() {
 
             }
         } catch (error) {
-            console.log(`error occured => ${req.originalUrl} : ${error.message}`);
+            console.log(`error occured =>  ${error.message}`);
         }
     }
     const handleLength = (e) => {

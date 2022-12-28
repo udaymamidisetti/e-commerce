@@ -9,7 +9,7 @@ export const storeUserData = (data) => async (dispatch) => {
       payload: data,
     });
   } catch (error) {
-    console.log(`error occured => ${req.originalUrl} : ${error.message}`);
+    console.log(`error occured =>  ${error.message}`);
   }
 }
 
@@ -47,7 +47,7 @@ export const getAddress = (payload, id) => async (dispatch) => {
       payload: data.data,
     });
   } catch (error) {
-    console.log(`error occured => ${req.originalUrl} : ${error.message}`);
+    console.log(`error occured =>  ${error.message}`);
     dispatch({ type: ActionTypes.GET_ADDRESS_FAILURE });
   }
 };
@@ -66,7 +66,7 @@ export const addAddress = (payload, id) => async (dispatch) => {
       payload: data.data,
     });
   } catch (error) {
-    console.log(`error occured => ${req.originalUrl} : ${error.message}`);
+    console.log(`error occured =>  ${error.message}`);
     dispatch({ type: ActionTypes.ADD_ADDRESS_FAILURE });
   }
 };
@@ -80,6 +80,7 @@ export const payment = (payload, userData, cb) => async () => {
   });
   const order_id = res.data.data.id;
   const data = res.data.data.order;
+
 
   const options = {
     key: process.env.REACT_APP_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard

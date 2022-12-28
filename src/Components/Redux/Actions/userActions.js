@@ -26,7 +26,7 @@ export const userLogin = (formData, callback, verify) => async (dispatch) => {
     if (error.response.data.message == "User not found") {
       callback("/sign-up");
     }
-    console.log(`error occured => ${req.originalUrl} : ${error.message}`);
+    console.log(`error occured =>  ${error.message}`);
   }
 };
 export const userSignup = (formData, navigate) => async (dispatch) => {
