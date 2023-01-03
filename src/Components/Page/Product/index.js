@@ -1,20 +1,14 @@
-import Button from '../../Common/Button';
-import ButtonOutline from '../../Common/ButtonOutline';
-import { BsCartPlusFill } from "react-icons/bs";
-import { AiOutlineHeart } from "react-icons/ai";
 import { FaRupeeSign } from "react-icons/fa";
-import { StarIcon, HeartIcon, CurrencyRupeeIcon } from '@heroicons/react/outline';
-import { BASE_URL, GET_PRODUCT_FAILURE } from './../../Redux/Actions/actionTypes';
+import { HeartIcon } from '@heroicons/react/outline';
+import { BASE_URL } from './../../Redux/Actions/actionTypes';
 import { addCart } from '../../Redux/Actions/cartAction';
-import { payment } from '../../Redux/Actions/actions';
 import { addFav, removeFav } from './../../Redux/Actions/wishlistAction';
-import { getAllProducts, getProduct } from '../../Redux/Actions/productAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect } from 'react';
 import { addCheckout } from '../../Redux/Actions/checkoutAction';
 
 function classNames(...classes) {
+
     return classes.filter(Boolean).join(' ')
 }
 
@@ -50,22 +44,19 @@ function Product() {
             }
         });
     }
-    console.log(tempProducts, "tempProducts");
+
     const handleCart = (id) => {
-        // console.log(id, "id");
         if (userFlag) {
             navigate("/login");
         }
         dispatch(addCart(id));
     }
     const handleCheckout = (product) => {
-        // console.log(id, "id");
         if (userFlag) {
             navigate("/login");
         }
-        dispatch(addCheckout([product]))
+        dispatch(addCheckout([{ product, quantity: 1 }]))
         navigate("/checkout");
-        // dispatch(payment({ product: id, user: userData._id }));
     }
     const wishlistHandler = (flag, id) => {
         if (!flag) {
@@ -75,13 +66,12 @@ function Product() {
         }
     }
     const productDetails = (id) => {
-        // dispatch(getProduct(id));
         navigate("/products/" + id);
     }
     return (
         <>
             {tempProducts && tempProducts.map((product, i) => {
-                return <div key={product._id} className="group relative p-4 border-r border-b border-gray-200 sm:p-6">
+                return <div key={i} className="group relative p-4 border-r border-b border-gray-200 sm:p-6">
                     <div className="rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
                         <img onClick={() => productDetails(product._id)}
                             src={BASE_URL + product.thumbnail}

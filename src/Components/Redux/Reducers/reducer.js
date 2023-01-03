@@ -44,6 +44,7 @@ const reducer = (state = initialState, action) => {
       return { ...state, address: action.payload, loading: false };
     case ActionTypes.ADD_ADDRESS_FAILURE:
       return { ...state, loading: false };
+
     // Get address
     case ActionTypes.GET_ADDRESS:
       return { ...state, loading: true };

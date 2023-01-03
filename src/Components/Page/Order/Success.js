@@ -32,8 +32,8 @@ function Success() {
                     <h2 className="sr-only">Your order</h2>
 
                     <h3 className="sr-only">Items</h3>
-                    {products.map((product) => (
-                        <div key={product.id} className="py-10 border-b border-gray-200 flex space-x-6">
+                    {products.map((product, i) => (
+                        <div key={i} className="py-10 border-b border-gray-200 flex space-x-6">
                             <img
                                 src={product.imageSrc}
                                 alt={product.imageAlt}

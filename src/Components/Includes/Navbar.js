@@ -257,9 +257,9 @@ function Navbar() {
                             {/* Mobile menu */}
                             <Disclosure.Panel as="nav" className="lg:hidden" aria-label="Global">
                                 <div className="pt-2 pb-3 px-2 space-y-1">
-                                    {categories.map((item) => (
+                                    {categories.map((item, i) => (
                                         <Disclosure.Button
-                                            key={item.name}
+                                            key={i}
                                             as="a"
                                             onClick={() => navigate("/products?category=" + item._id)}
                                             className={classNames(

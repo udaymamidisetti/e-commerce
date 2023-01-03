@@ -62,7 +62,7 @@ function WishlistView() {
     return (
         <>
             {array && array.map((product, i) => {
-                return <div key={product._id} className="group relative p-4 border-r border-b border-gray-200 sm:p-6">
+                return <div key={i} className="group relative p-4 border-r border-b border-gray-200 sm:p-6">
                     <div className="rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
                         <img onClick={() => productDetails(product._id)}
                             src={BASE_URL + product.thumbnail}

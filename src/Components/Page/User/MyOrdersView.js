@@ -72,8 +72,8 @@ function MyOrdersView() {
 
                     <div className="mt-6 flow-root px-4 sm:mt-10 sm:px-0">
                         <div className="-my-6 divide-y divide-gray-200 sm:-my-10">
-                            {order.product.map((prd) => (
-                                <div key={prd.id} className="flex py-6 sm:py-10">
+                            {order.product.map((prd, i) => (
+                                <div key={i} className="flex py-6 sm:py-10">
                                     <div className="min-w-0 flex-1 lg:flex lg:flex-col">
                                         <div className="lg:flex-1">
                                             <div className="sm:flex">

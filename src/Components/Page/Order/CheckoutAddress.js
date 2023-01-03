@@ -24,7 +24,9 @@ function CheckoutAddress() {
         setOpen(false);
         dispatch(addAddress(formData));
     }
-    useEffect(() => { dispatch(addCheckoutAddress(selectedDeliveryMethod)) }, [selectedDeliveryMethod]);
+    useEffect(() => {
+        dispatch(addCheckoutAddress(selectedDeliveryMethod))
+    }, [dispatch]);
     return (
         <form ref={addressForm}>
             <div className="">
@@ -32,9 +34,9 @@ function CheckoutAddress() {
                     <RadioGroup.Label className="text-lg font-medium text-gray-900">Select from Saved Address</RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                        {address.map((adr) => (
+                        {address.map((adr, i) => (
                             <RadioGroup.Option
-                                key={adr._id}
+                                key={i}
                                 value={adr}
                                 className={({ checked, active }) =>
                                     classNames(

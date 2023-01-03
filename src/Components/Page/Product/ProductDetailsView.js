@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useReducer, useState } from 'react'
+import { Fragment, useEffect, useReducer, useRef, useState } from 'react'
 import { StarIcon } from '@heroicons/react/solid'
 import { Tab } from '@headlessui/react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -7,7 +7,7 @@ import { BASE_URL } from '../../Redux/Actions/actionTypes'
 import { FaRupeeSign, FaShareAlt } from 'react-icons/fa'
 import { Carousel } from 'react-responsive-carousel';
 import axios from 'axios'
-import { getProduct } from '../../Redux/Actions/productAction'
+import { getProduct, addReview, getReview } from '../../Redux/Actions/productAction'
 import Loader from '../../Common/Loader'
 import { IoLogoWhatsapp } from 'react-icons/io'
 import { payment } from '../../Redux/Actions/actions'
@@ -18,38 +18,161 @@ import { toast } from 'react-toastify'
 import CheckDelivery from './CheckDelivery'
 import { addCheckout } from '../../Redux/Actions/checkoutAction'
 
-const reviews = {
-    average: 4,
-    featured: [
-        {
-            id: 1,
-            rating: 5,
-            content: `
-        <p>This icon pack is just what I need for my latest project. There's an icon for just about anything I could ever need. Love the playful look!</p>
-      `,
-            date: 'July 16, 2021',
-            datetime: '2021-07-16',
-            author: 'Emily Selman',
-            avatarSrc:
-                'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
-        },
-        {
-            id: 2,
-            rating: 5,
-            content: `
-        <p>Blown away by how polished this icon pack is. Everything looks so consistent and each SVG is optimized out of the box so I can use it directly with confidence. It would take me several hours to create a single icon this good, so it's a steal at this price.</p>
-      `,
-            date: 'July 12, 2021',
-            datetime: '2021-07-12',
-            author: 'Hector Gibbons',
-            avatarSrc:
-                'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
-        },
-        // More reviews...
-    ],
-}
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
+}
+function AddReviewComponent({ id, userData }) {
+    const [rating, setRating] = useState(0);
+    const [page, setPage] = useState(1);
+    const [clickrating, setClickrating] = useState(0);
+    const comment = useRef();
+    const dispatch = useDispatch();
+    const userFlag = Object.entries(userData).length == 0;
+    const navigate = useNavigate();
+    const { reviews, pagination } = useSelector((item) => item.productReducer);
+    const handleSubmit = () => {
+        if (userFlag) {
+            navigate("/login");
+        }
+        const data = { comment: comment.current.value, review: clickrating, product: id };
+        dispatch(addReview(data));
+    }
+    useEffect(() => {
+        dispatch(getReview(id, page))
+    }, [page])
+
+    return (
+        <>
+            <div className="w-full max-w-2xl mx-auto mt-16 lg:max-w-none lg:mt-0 lg:col-span-4">
+                <div className="flex text-sm text-gray-500 ">
+                    <div className={classNames('border-t border-gray-200', 'py-10')}>
+                        <h2 className="font-bold text-gray-900">Add Review</h2>
+                        <div className="flex items-center mt-4">
+                            {[1, 2, 3, 4, 5].map((elem, i) => (
+                                <StarIcon
+                                    key={i}
+                                    onMouseEnter={() => setRating(elem)}
+                                    onMouseLeave={() => setRating(0)}
+                                    onClick={() => setClickrating(elem)}
+                                    className={classNames(
+                                        rating >= elem || clickrating >= elem ? 'text-yellow-400' : 'text-gray-300',
+                                        'h-10 w-10 flex-shrink-0'
+                                    )}
+                                    aria-hidden="true"
+                                />
+                            ))}
+                        </div>
+                        <p className="sr-only">{5} out of 5 stars</p>
+                    </div>
+                </div>
+                <div >
+                    <textarea ref={comment} rows="4" name="comment" id="comment" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-kazari-500 focus:ring-kazari-500 sm:text-sm" />
+
+                </div>
+                <div >
+                    <button
+                        type="button"
+                        className="w-full mt-5 bg-kazari-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-kazari-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-kazari-500"
+                        onClick={handleSubmit}
+                    >
+                        Submit
+                    </button>
+                </div>
+            </div>
+            <div className="w-full max-w-2xl mx-auto lg:max-w-none lg:mt-0 lg:col-span-4">
+                <Tab.Group as="div">
+                    <div className="border-b border-gray-200">
+                        <Tab.List className="-mb-px flex space-x-8">
+                            <Tab
+                                className={({ selected }) =>
+                                    classNames(
+                                        selected
+                                            ? 'border-kazari-600 text-kazari-600'
+                                            : 'border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300',
+                                        'whitespace-nowrap py-6 border-b-2 font-medium text-sm'
+                                    )
+                                }
+                            >
+                                Customer Reviews
+                            </Tab>
+                        </Tab.List>
+                    </div>
+                    <Tab.Panels as={Fragment}>
+                        <Tab.Panel className="-mb-10">
+                            <h3 className="sr-only">Customer Reviews</h3>
+
+                            {reviews ? reviews.map((review, reviewIdx) => (
+                                <div key={reviewIdx} className="flex text-sm text-gray-500 space-x-4">
+                                    <div className="flex-none py-10">
+                                        <img src={"https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png"} alt="" className="w-10 h-10 bg-gray-100 rounded-full" />
+                                    </div>
+                                    <div className={classNames(reviewIdx === 0 ? '' : 'border-t border-gray-200', 'py-10')}>
+                                        <h3 className="font-medium text-gray-900">{review.user.name}</h3>
+                                        <p>
+                                            <time dateTime={review.createdAt}>{review.createdAt}</time>
+                                        </p>
+
+                                        <div className="flex items-center mt-4">
+                                            {[0, 1, 2, 3, 4].map((rating, i) => (
+                                                <StarIcon
+                                                    key={i}
+                                                    className={classNames(
+                                                        review.review > rating ? 'text-yellow-400' : 'text-gray-300',
+                                                        'h-5 w-5 flex-shrink-0'
+                                                    )}
+                                                    aria-hidden="true"
+                                                />
+                                            ))}
+                                        </div>
+                                        <p className="sr-only">{review.review} out of 5 stars</p>
+
+                                        <div className="mt-4 prose prose-sm max-w-none text-gray-500"
+                                            dangerouslySetInnerHTML={{ __html: review.comment }}
+                                        />
+                                    </div>
+                                </div>
+                            )) :
+                                <div className="my-4 prose prose-sm max-w-none ">
+                                    No review found
+                                </div>
+                            }
+                        </Tab.Panel>
+                    </Tab.Panels>
+                </Tab.Group>
+            </div>
+            {reviews && pagination.pagesCount > 1 && <div className="w-full max-w-2xl mx-auto lg:max-w-none lg:mt-0 lg:col-span-4">
+                <nav
+                    className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+                    aria-label="Pagination"
+                >
+                    <div className="hidden sm:block">
+                        <p className="text-sm text-gray-700">
+                            Showing <span className="font-medium">1</span> to <span className="font-medium">5</span> of{' '}
+                            <span className="font-medium">{pagination.reviewCount}</span> results
+                        </p>
+                    </div>
+                    <div className="flex flex-1 justify-between sm:justify-end">
+                        <a
+                            href="#"
+                            className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                            onClick={() => setPage(page - 1)}
+                        >
+                            Previous
+                        </a>
+                        <a
+                            href="#"
+                            className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                            onClick={() => setPage(page + 1)}
+                        >
+                            Next
+                        </a>
+                    </div>
+                </nav>
+            </div>}
+
+        </>
+    );
 }
 function ProductDetailsView() {
     const dispatch = useDispatch();
@@ -73,7 +196,7 @@ function ProductDetailsView() {
         }
         dispatch(addCheckout([product]))
         navigate("/checkout");
-        // dispatch(payment({ product: id, user: userData._id }, userData));
+        // dispatch(payment({product: id, user: userData._id }, userData));
     }
     const wishlistHandler = (flag, id) => {
         if (!flag) {
@@ -85,6 +208,11 @@ function ProductDetailsView() {
     const handleShare = (id) => {
         toast.success("Link copied to your clipboard");
     }
+    // useEffect(() => {
+    //     if (Object.keys(productDetails).length) {
+    //         dispatch(getReview(productDetails._id));
+    //     }
+    // }, [productDetails])
     return (
         <>
             {Object.keys(productDetails).length &&
@@ -158,21 +286,21 @@ function ProductDetailsView() {
                                                 <StarIcon
                                                     key={i}
                                                     className={classNames(
-                                                        reviews.average > rating ? 'text-yellow-400' : 'text-gray-300',
+                                                        5 > rating ? 'text-yellow-400' : 'text-gray-300',
                                                         'h-5 w-5 flex-shrink-0'
                                                     )}
                                                     aria-hidden="true"
                                                 />
                                             ))}
                                         </div>
-                                        <p className="sr-only">{reviews.average} out of 5 stars</p>
+                                        <p className="sr-only">{5} out of 5 stars</p>
                                     </div>
                                     <div className='basis-1/4'>
                                         <h3 className="sr-only">Share</h3>
                                         <div className="flex items-center">
                                             <FaShareAlt onClick={() => handleShare()} className='hover:text-slate-400 cursor-pointer' />
                                         </div>
-                                        <p className="sr-only">{reviews.average} out of 5 stars</p>
+                                        <p className="sr-only">{5} out of 5 stars</p>
                                     </div>
                                     <div className='basis-2/4'>
                                         <HeartIcon onClick={() => wishlistHandler(Object.hasOwn(wishlist, productDetails._id), productDetails._id)} className={Object.hasOwn(wishlist, productDetails._id) ? " fill-kazari-100 float-right stroke-kazari-100 h-8 w-8 bg-transparent hover:cursor-pointer" : " hover:fill-kazari-100 hover:stroke-kazari-100 h-8 w-8 bg-transparent hover:cursor-pointer float-right"} />
@@ -231,69 +359,8 @@ function ProductDetailsView() {
                                         </ul>
                                     </div>
                                 </div>
-
-
-
-
                             </div>
-
-                            <div className="w-full max-w-2xl mx-auto mt-16 lg:max-w-none lg:mt-0 lg:col-span-4">
-                                <Tab.Group as="div">
-                                    <div className="border-b border-gray-200">
-                                        <Tab.List className="-mb-px flex space-x-8">
-                                            <Tab
-                                                className={({ selected }) =>
-                                                    classNames(
-                                                        selected
-                                                            ? 'border-kazari-600 text-kazari-600'
-                                                            : 'border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300',
-                                                        'whitespace-nowrap py-6 border-b-2 font-medium text-sm'
-                                                    )
-                                                }
-                                            >
-                                                Customer Reviews
-                                            </Tab>
-                                        </Tab.List>
-                                    </div>
-                                    <Tab.Panels as={Fragment}>
-                                        <Tab.Panel className="-mb-10">
-                                            <h3 className="sr-only">Customer Reviews</h3>
-
-                                            {reviews.featured.map((review, reviewIdx) => (
-                                                <div key={review.id} className="flex text-sm text-gray-500 space-x-4">
-                                                    <div className="flex-none py-10">
-                                                        <img src={review.avatarSrc} alt="" className="w-10 h-10 bg-gray-100 rounded-full" />
-                                                    </div>
-                                                    <div className={classNames(reviewIdx === 0 ? '' : 'border-t border-gray-200', 'py-10')}>
-                                                        <h3 className="font-medium text-gray-900">{review.author}</h3>
-                                                        <p>
-                                                            <time dateTime={review.datetime}>{review.date}</time>
-                                                        </p>
-
-                                                        <div className="flex items-center mt-4">
-                                                            {[0, 1, 2, 3, 4].map((rating, i) => (
-                                                                <StarIcon
-                                                                    key={i}
-                                                                    className={classNames(
-                                                                        review.rating > rating ? 'text-yellow-400' : 'text-gray-300',
-                                                                        'h-5 w-5 flex-shrink-0'
-                                                                    )}
-                                                                    aria-hidden="true"
-                                                                />
-                                                            ))}
-                                                        </div>
-                                                        <p className="sr-only">{review.rating} out of 5 stars</p>
-
-                                                        <div className="mt-4 prose prose-sm max-w-none text-gray-500"
-                                                            dangerouslySetInnerHTML={{ __html: review.content }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </Tab.Panel>
-                                    </Tab.Panels>
-                                </Tab.Group>
-                            </div>
+                            <AddReviewComponent userData={userData} id={productDetails._id} />
                         </div>
                     </div>
                 </div >}

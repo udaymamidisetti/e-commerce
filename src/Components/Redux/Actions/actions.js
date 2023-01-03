@@ -47,7 +47,7 @@ export const getAddress = (payload, id) => async (dispatch) => {
       payload: data.data,
     });
   } catch (error) {
-    console.log(`error occured =>  ${error.message}`);
+    console.log(`error occured => ${error.message}`);
     dispatch({ type: ActionTypes.GET_ADDRESS_FAILURE });
   }
 };

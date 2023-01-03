@@ -48,12 +48,12 @@ function AllProduct() {
 
                     <div className="-mx-px mb-10 grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4 gap-10">
                         <div>
-                            <label for="medium-range" class="block mb-2 text-sm font-medium text-gray-900 ">Price
+                            <label htmlFor="medium-range" className="block mb-2 text-sm font-medium text-gray-900 ">Price
                                 <span className='float-right'>
                                     <span className='inline-flex items-center'><FaRupeeSign className="h-4 w-4" aria-hidden="true" />{slider}</span>
                                 </span>
                             </label>
-                            <input type="range" min="0" max="10000" value={slider} step="100" onChange={(e) => dispatch(setSlider(e.currentTarget.value))} class="form-range appearance-none w-full h-2 p-0 bg-transparent focus:outline-none focus:ring-0 focus:shadow-none  dark:bg-kazari-500" id="customRange1" />
+                            <input type="range" min="0" max="10000" value={slider} step="100" onChange={(e) => dispatch(setSlider(e.currentTarget.value))} className="form-range appearance-none w-full h-2 p-0 bg-transparent focus:outline-none focus:ring-0 focus:shadow-none  dark:bg-kazari-500" id="customRange1" />
                         </div>
                         {/* <div>
                             <select name="sort" className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-kazari-500 focus:border-kazari-500 sm:text-sm rounded-md" defaultValue="">

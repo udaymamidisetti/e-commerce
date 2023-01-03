@@ -50,9 +50,9 @@ function Search() {
                                     Nothing found.
                                 </div>
                             ) : (
-                                filteredProduct.map((product) => (
+                                filteredProduct.map((product, i) => (
                                     <Combobox.Option
-                                        key={product._id}
+                                        key={i}
                                         className={({ active }) =>
                                             `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-kazari-600 text-white' : 'text-gray-900'
                                             }`
@@ -63,8 +63,8 @@ function Search() {
 
                                             <Link to={"/products/" + product._id}>
                                                 <div className="grid grid-cols-5 gap-4">
-                                                    <div class=""><img className="max-w-full h-[10vh] mx-auto object-center object-contain" src={BASE_URL + product.thumbnail} /></div>
-                                                    <div class="col-span-4 flex items-center">
+                                                    <div className=""><img className="max-w-full h-[10vh] mx-auto object-center object-contain" src={BASE_URL + product.thumbnail} /></div>
+                                                    <div className="col-span-4 flex items-center">
                                                         <span className="ml-1">
                                                             {product.name}
                                                         </span>

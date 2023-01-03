@@ -2,47 +2,26 @@ import { CheckIcon, ClockIcon } from '@heroicons/react/solid'
 import { useSelector, useDispatch } from 'react-redux';
 import { BASE_URL } from './../../Redux/Actions/actionTypes';
 import { FaRupeeSign } from 'react-icons/fa';
-import { deleteCartItem } from './../../Redux/Actions/cartAction';
+import { deleteCartItem, changeQuantity } from './../../Redux/Actions/cartAction';
 import { Link, useNavigate } from 'react-router-dom';
-import { addCheckout } from '../../Redux/Actions/checkoutAction';
+import { addCheckoutCart } from '../../Redux/Actions/checkoutAction';
 
-const products = [
-    {
-        id: 1,
-        name: 'Nomad Tumbler',
-        href: '#',
-        price: '$35.00',
-        color: 'White',
-        inStock: true,
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-03.jpg',
-        imageAlt: 'Insulated bottle with white base and black snap lid.',
-    },
-    {
-        id: 2,
-        name: 'Basic Tee',
-        href: '#',
-        price: '$32.00',
-        color: 'Sienna',
-        inStock: true,
-        size: 'Large',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-01.jpg',
-        imageAlt: "Front of men's Basic Tee in sienna.",
-    },
-    // More products...
-]
-export default function Cart({ cart, dispatch }) {
+
+export default function Cart() {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const handleQuantityChange = (e, id) => {
+
+    }
     const handleRemove = (id) => {
         dispatch(deleteCartItem(id));
     }
-    let temp = [];
-    cart.map(({ product }) => {
-        temp.push(product);
-    });
+    const { cart } = useSelector((item) => item.cartReducer);
     const proceedCheckout = () => {
-        dispatch(addCheckout(temp));
-        navigate("/checkout");
+        console.log("proceedCheckout");
+        dispatch(addCheckoutCart(navigate));
+
     }
     return (
         <div className="bg-white">
@@ -54,8 +33,8 @@ export default function Cart({ cart, dispatch }) {
                         <h2 className="sr-only">Items in your shopping cart</h2>
 
                         <ul role="list" className="border-t border-b overflow-y-auto h-[50vh] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-10 pr-5 border-gray-200 divide-y divide-gray-200">
-                            {cart.map(({ product }) => (
-                                <li key={product.id} className="flex items-center py-2 sm:py-2">
+                            {cart.length !== 0 && cart.map(({ product, quantity }, i) => (
+                                <li key={i} className="flex items-center py-2 sm:py-2">
                                     <div className="flex-shrink-0">
                                         <img src={BASE_URL + product.thumbnail} alt={product.name + " image"} className="w-24 h-24 rounded-lg object-center object-cover sm:w-32 sm:h-32" />
                                     </div>
@@ -90,6 +69,7 @@ export default function Cart({ cart, dispatch }) {
                                                 <select
                                                     id={`quantity-${product._id}`}
                                                     name={`quantity-${product._id}`}
+                                                    onChange={(e) => handleQuantityChange(e, product._id)}
                                                     className="block max-w-full rounded-md border border-gray-300 py-1.5 text-base leading-5 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-kazari-500 focus:border-kazari-500 sm:text-sm"
                                                 >
                                                     {Array.from({ length: 10 }).map((item, i) => {
@@ -97,10 +77,10 @@ export default function Cart({ cart, dispatch }) {
                                                             return;
                                                         }
                                                         let selected = "";
-                                                        if (product.quantity == i) {
+                                                        if (quantity == i) {
                                                             selected = "selected";
                                                         }
-                                                        return <option value={i} selected={selected}>{i}</option>
+                                                        return <option value={i} key={i} selected={selected}>{i}</option>
                                                     })}
                                                 </select>
 

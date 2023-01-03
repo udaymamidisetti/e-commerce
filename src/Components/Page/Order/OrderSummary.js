@@ -5,34 +5,31 @@ import { BASE_URL } from '../../Redux/Actions/actionTypes';
 import { FaRupeeSign } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { addQuantity } from '../../Redux/Actions/checkoutAction';
+import { addQuantity, removeCheckout } from '../../Redux/Actions/checkoutAction';
 import { payment } from '../../Redux/Actions/actions';
 import { toast } from 'react-toastify';
 function OrderSummary() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [total, setTotal] = useState(0);
-    const { checkout, quantity, address } = useSelector((item) => item.checkoutReducer);
+    const { checkout, address } = useSelector((item) => item.checkoutReducer);
     const { userData } = useSelector((item) => item.reducer);
-
+    console.log(checkout, "checkout");
     const setTotalHandle = () => {
         let totalPrice = 0;
-        setTotal(totalPrice);
-        checkout.map(({ _id, price }) => {
-            totalPrice += parseInt(quantity[_id]) * parseInt(price);
+        checkout.map(({ product, quantity }) => {
+            totalPrice += parseInt(quantity) * parseInt(product.price);
         })
-        setTotal(parseInt(totalPrice));
+        return parseInt(totalPrice);
     }
-    useEffect(() => {
-        setTotalHandle();
-    }, [checkout])
-    const handleQuantity = (id, prdQuantity) => {
-        let temp = quantity;
-        temp[id] = parseInt(prdQuantity);
-        dispatch(addQuantity(temp));
-        setTotalHandle();
-        // let newTotal = parseInt(total) - (parseInt(e.currentTarget.value) * parseInt(price));
-        // setTotal((parseInt(e.currentTarget.value) * parseInt(price)) + parseInt(total));
+    // const handleQuantity = (id, prdQuantity) => {
+    //     let temp = quantity;
+    //     temp[id] = parseInt(prdQuantity);
+    //     dispatch(addQuantity(temp));
+    //     // let newTotal = parseInt(total) - (parseInt(e.currentTarget.value) * parseInt(price));
+    //     // setTotal((parseInt(e.currentTarget.value) * parseInt(price)) + parseInt(total));
+    // }
+    const handleCheckoutRemove = (id) => {
+        removeCheckout(id);
     }
     const handlePayment = () => {
         if (address == undefined || Object.keys(address).length == 0) {
@@ -54,8 +51,8 @@ function OrderSummary() {
             <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">
                 <h3 className="sr-only">Items in your cart</h3>
                 <ul role="list" className="divide-y divide-gray-200">
-                    {checkout.map((product) => (
-                        <li key={product._id} className="flex py-6 px-4 sm:px-6">
+                    {checkout.length !== 0 && checkout.map(({ product, quantity }, i) => (
+                        <li key={i} className="flex py-6 px-4 sm:px-6">
                             <div className="flex-shrink-0">
                                 <img src={BASE_URL + product.thumbnail} alt={product.name + " Image"} className="w-20 rounded-md" />
                             </div>
@@ -73,6 +70,7 @@ function OrderSummary() {
                                     <div className="ml-4 flex-shrink-0 flow-root">
                                         <button
                                             type="button"
+                                            onClick={() => handleCheckoutRemove(product._id)}
                                             className="-m-2.5 bg-white p-2.5 flex items-center justify-center text-gray-400 hover:text-gray-500"
                                         >
                                             <span className="sr-only">Remove</span>
@@ -95,16 +93,20 @@ function OrderSummary() {
                                         <select
                                             id="quantity"
                                             name="quantity"
-                                            className="rounded-md border border-gray-300 text-base font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-kazari-500 focus:border-kazari-500 sm:text-sm" onChange={(e) => handleQuantity(product._id, e.currentTarget.value)}
+                                            className="rounded-md border border-gray-300 text-base font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-kazari-500 focus:border-kazari-500 sm:text-sm"
                                         >
-                                            <option value={1}>1</option>
-                                            <option value={2}>2</option>
-                                            <option value={3}>3</option>
-                                            <option value={4}>4</option>
-                                            <option value={5}>5</option>
-                                            <option value={6}>6</option>
-                                            <option value={7}>7</option>
-                                            <option value={8}>8</option>
+                                            {Array.from({ length: 10 }).map((item, i) => {
+                                                if (i == 0) {
+                                                    return;
+                                                }
+                                                let selected = "";
+
+
+                                                if (quantity == i) {
+                                                    selected = "selected";
+                                                }
+                                                return <option value={i} key={i} selected={selected}>{i}</option>
+                                            })}
                                         </select>
                                     </div>
                                 </div>
@@ -119,7 +121,7 @@ function OrderSummary() {
                             <div className="flex flex-1 justify-left mt-2 items-center">
                                 <FaRupeeSign className="flex-shrink-0 h-3 w-3 " aria-hidden="true" />
                                 <span href="#" className="ml-1 text-base font-medium">
-                                    {(total - ((total / 100) * 18)).toFixed(2)}
+                                    {(setTotalHandle() - ((setTotalHandle() / 100) * 18)).toFixed(2)}
                                 </span>
                             </div></dd>
                     </div>
@@ -129,7 +131,7 @@ function OrderSummary() {
                     </div>
                     <div className="flex items-center justify-between">
                         <dt className="text-sm">Taxes (18%)</dt>
-                        <dd className="text-sm font-medium text-gray-900">{((total / 100) * 18).toFixed(2)}</dd>
+                        <dd className="text-sm font-medium text-gray-900">{((setTotalHandle() / 100) * 18).toFixed(2)}</dd>
                     </div>
                     <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                         <dt className="text-base font-medium">Total</dt>
@@ -137,7 +139,7 @@ function OrderSummary() {
                             <div className="flex flex-1 justify-left mt-2 items-center">
                                 <FaRupeeSign className="flex-shrink-0 h-3 w-3 " aria-hidden="true" />
                                 <span href="#" className="ml-1 text-base font-medium">
-                                    {total}
+                                    {setTotalHandle()}
                                 </span>
                             </div>
                         </dd>

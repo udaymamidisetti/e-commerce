@@ -18,8 +18,8 @@ const RouteComponent = () => {
                     {RoutesData.map((item, index) => {
                         return (
                             item.private ? (
-                                <Route exact element={<Middleware />}>
-                                    <Route key={index} exact={item.exact} path={item.path} name={item.name} element={item.element} />
+                                <Route key={index} exact element={<Middleware />}>
+                                    <Route exact={item.exact} path={item.path} name={item.name} element={item.element} />
                                 </Route>
                             ) : (
                                 <Route key={index} exact={item.exact} path={item.path} name={item.name} element={item.element}

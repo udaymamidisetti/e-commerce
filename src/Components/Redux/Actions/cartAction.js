@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 export const getCart = () => async (dispatch) => {
   dispatch({ type: ActionTypes.GET_CART });
   let url = `${ActionTypes.BASE_URL}api/cart`;
-  console.log("getCaart");
   try {
     const res = await axios.get(url, {
       headers: {
@@ -14,7 +13,6 @@ export const getCart = () => async (dispatch) => {
       }
     },);
     const data = res.data.data;
-
     dispatch({
       type: ActionTypes.GET_CART_SUCCESS,
       payload: data,
@@ -43,6 +41,23 @@ export const addCart = (payload) => async (dispatch) => {
     dispatch({ type: ActionTypes.ADD_CART_FAILURE });
   }
 };
+// export const changeQuantity = (quntity, id) =>
+//   async (dispatch) => {
+//     dispatch({ type: ActionTypes.CHNAGE_CART_QUANTITY });
+//     let url = `${ActionTypes.BASE_URL}api/cart/product/${payload}`;
+//     try {
+//       const res = await axios.post(url, {}, {
+//         headers: {
+//           'token': ActionTypes.BASE_TOKEN
+//         }
+//       });
+//       dispatch({ type: ActionTypes.DELETE_CART_SUCCESS, payload: payload });
+//     } catch (error) {
+//       console.log(error)
+//       dispatch({ type: ActionTypes.DELETE_CART_FAILURE });
+//     }
+//   }
+
 
 export const deleteCartItem = (payload) => {
   return async (dispatch) => {

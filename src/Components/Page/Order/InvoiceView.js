@@ -118,8 +118,8 @@ function InvoiceView() {
                                                     </tr>
                                                 </thead>
                                                 <tbody className="text-gray-900 bg-white">
-                                                    {order.product.map((elem) =>
-                                                        <tr>
+                                                    {order.product.map((elem, i) =>
+                                                        <tr key={i}>
                                                             <td className="p-4 text-sm font-normal whitespace-nowrap">
                                                                 <div className="text-base font-semibold">
                                                                     {elem.name}

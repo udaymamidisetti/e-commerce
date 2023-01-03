@@ -262,7 +262,7 @@ function ProductDetails() {
                                     <h3 className="sr-only">Customer Reviews</h3>
 
                                     {reviews.featured.map((review, reviewIdx) => (
-                                        <div key={review.id} className="flex text-sm text-gray-500 space-x-4">
+                                        <div key={reviewIdx} className="flex text-sm text-gray-500 space-x-4">
                                             <div className="flex-none py-10">
                                                 <img src={review.avatarSrc} alt="" className="w-10 h-10 bg-gray-100 rounded-full" />
                                             </div>

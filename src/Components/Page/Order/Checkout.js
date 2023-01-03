@@ -22,16 +22,6 @@ import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import { getAddress } from '../../Redux/Actions/actions'
 
-const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
-
-
-const deliveryMethods = [
-  { id: 1, title: 'Standard', turnaround: '4–10 business days', price: '$5.00' },
-  { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
-  { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
-]
-
-
 export default function Checkout() {
   const dispatch = useDispatch();
   useEffect(() => {

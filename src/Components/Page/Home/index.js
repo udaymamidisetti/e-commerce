@@ -94,7 +94,7 @@ function Home() {
         // dispatch(getProduct(id));
         navigate("/products/" + id);
     }
-    console.log(categories);
+    console.log(Object.keys(categories).length, "categories");
     return (
         <>
             {(Object.keys(categories).length !== 0) && <div className="bg-white" >
@@ -125,7 +125,8 @@ function Home() {
                                     <div className="p-6 flex items-end">
                                         <div>
                                             <h3 className="font-semibold text-white">
-                                                <Link to={"/products?category=" + Object.keys(categories).length != 0 ? categories.find((item) => item.name.toLowerCase() == "Bags".toLowerCase())._id : "all"}>
+                                                {/* <Link to={"/products?category=" + Object.keys(categories).length !== 0 ? categories.find((item) => item.name.toLowerCase() == "Bags".toLowerCase())._id : "all"}> */}
+                                                <Link to={"/products?category=all"}>
                                                     <span className="" />
                                                     Bags
                                                 </Link>
@@ -153,7 +154,8 @@ function Home() {
                                     <div className="p-6 flex items-end sm:absolute sm:inset-0">
                                         <div>
                                             <h3 className="font-semibold text-white">
-                                                <Link to={"/products?category=" + Object.keys(categories).length != 0 ? categories.find((item) => item.name.toLowerCase() == "APPAREL".toLowerCase())._id : "all"}>
+                                                {/* <Link to={"/products?category=" + Object.keys(categories).length !== 0 ? categories.find((item) => item.name.toLowerCase() == "Bags".toLowerCase())._id : "all"}> */}
+                                                <Link to={"/products?category=all"}>
                                                     <span className="absolute inset-0" />
                                                     APPAREL
                                                 </Link>
@@ -177,7 +179,8 @@ function Home() {
                                     <div className="p-6 flex items-end sm:absolute sm:inset-0">
                                         <div>
                                             <h3 className="font-semibold text-white">
-                                                <Link to={"/products?category=" + Object.keys(categories).length != 0 ? categories.find((item) => item.name.toLowerCase() == "Bags".toLowerCase())._id : "all"}>
+                                                {/* <Link to={"/products?category=" + Object.keys(categories).length !== 0 ? categories.find((item) => item.name.toLowerCase() == "Bags".toLowerCase())._id : "all"}> */}
+                                                <Link to={"/products?category=all"}>
                                                     <span className="absolute inset-0" />
                                                     Bags
                                                 </Link>
@@ -241,8 +244,8 @@ function Home() {
                             <Carousel >
                                 {productsTemp && productsTemp.map((product, i) => {
                                     return <div key={i} className="mt-6 grid grid-cols-1 gap-y-10 sm:grid-cols-3 sm:gap-y-0 sm:gap-x-6 lg:gap-x-8">
-                                        {product.map((products) => (
-                                            <div key={products._id} className="group relative p-4 border-r border-b border-gray-200 sm:p-6" >
+                                        {product.map((products, i) => (
+                                            <div key={i} className="group relative p-4 border-r border-b border-gray-200 sm:p-6" >
                                                 <div className="rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
                                                     <img onClick={() => productDetails(products._id)}
                                                         src={BASE_URL + products.thumbnail}
