@@ -2,6 +2,7 @@ import * as ActionTypes from "../Actions/actionTypes";
 
 const initialState = {
   productLoading: false,
+  reviewUserFlag: false,
   products: [],
   reviews: [],
   pagination: { pagesCount: 0, reviewCount: 0 },
@@ -26,7 +27,7 @@ const productReducer = (state = initialState, action) => {
     case ActionTypes.GET_REVIEW:
       return { ...state, loading: true };
     case ActionTypes.GET_REVIEW_SUCCESS:
-      return { ...state, reviews: action.payload.data, pagination: action.payload.pagination, loading: false };
+      return { ...state, reviews: action.payload.data, pagination: action.payload.pagination, reviewUserFlag: action.payload.reviewUserFlag, loading: false };
     case ActionTypes.GET_REVIEW_FAILURE:
       return { ...state, loading: false };
 

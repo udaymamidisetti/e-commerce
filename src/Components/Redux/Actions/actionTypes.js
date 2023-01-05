@@ -2,7 +2,6 @@ import { decodeToken } from "react-jwt";
 export const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const BASE_TOKEN = localStorage.getItem(process.env.REACT_APP_TOKEN);
 
-
 // User
 export const USER_LOG_IN = "USER_LOG_IN";
 export const USER_LOG_IN_SUCESSS = "USER_LOG_IN_SUCESSS";

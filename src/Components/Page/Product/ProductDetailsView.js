@@ -26,17 +26,20 @@ function AddReviewComponent({ id, userData }) {
     const [rating, setRating] = useState(0);
     const [page, setPage] = useState(1);
     const [clickrating, setClickrating] = useState(0);
+    const [addReviewFlag, setReviewFlag] = useState(true);
     const comment = useRef();
     const dispatch = useDispatch();
     const userFlag = Object.entries(userData).length == 0;
     const navigate = useNavigate();
-    const { reviews, pagination } = useSelector((item) => item.productReducer);
+    const { reviews, pagination, reviewUserFlag } = useSelector((item) => item.productReducer);
     const handleSubmit = () => {
         if (userFlag) {
             navigate("/login");
         }
         const data = { comment: comment.current.value, review: clickrating, product: id };
         dispatch(addReview(data));
+        comment.current.value = "";
+        setReviewFlag(false);
     }
     useEffect(() => {
         dispatch(getReview(id, page))
@@ -44,42 +47,51 @@ function AddReviewComponent({ id, userData }) {
 
     return (
         <>
-            <div className="w-full max-w-2xl mx-auto mt-16 lg:max-w-none lg:mt-0 lg:col-span-4">
-                <div className="flex text-sm text-gray-500 ">
-                    <div className={classNames('border-t border-gray-200', 'py-10')}>
-                        <h2 className="font-bold text-gray-900">Add Review</h2>
-                        <div className="flex items-center mt-4">
-                            {[1, 2, 3, 4, 5].map((elem, i) => (
-                                <StarIcon
-                                    key={i}
-                                    onMouseEnter={() => setRating(elem)}
-                                    onMouseLeave={() => setRating(0)}
-                                    onClick={() => setClickrating(elem)}
-                                    className={classNames(
-                                        rating >= elem || clickrating >= elem ? 'text-yellow-400' : 'text-gray-300',
-                                        'h-10 w-10 flex-shrink-0'
-                                    )}
-                                    aria-hidden="true"
-                                />
-                            ))}
-                        </div>
-                        <p className="sr-only">{5} out of 5 stars</p>
-                    </div>
-                </div>
-                <div >
-                    <textarea ref={comment} rows="4" name="comment" id="comment" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-kazari-500 focus:ring-kazari-500 sm:text-sm" />
+            {reviewUserFlag &&
+                <div className="w-full max-w-2xl mx-auto mt-16 lg:max-w-none lg:mt-0 lg:col-span-4">
+                    {addReviewFlag ?
+                        <>
+                            <div className="flex text-sm text-gray-500 ">
+                                <div className={classNames('border-t border-gray-200', 'py-10')}>
+                                    <h2 className="font-bold text-gray-900">Add Review</h2>
+                                    <div className="flex items-center mt-4">
+                                        {[1, 2, 3, 4, 5].map((elem, i) => (
+                                            <StarIcon
+                                                key={i}
+                                                onMouseEnter={() => setRating(elem)}
+                                                onMouseLeave={() => setRating(0)}
+                                                onClick={() => setClickrating(elem)}
+                                                className={classNames(
+                                                    rating >= elem || clickrating >= elem ? 'text-yellow-400' : 'text-gray-300',
+                                                    'h-10 w-10 flex-shrink-0'
+                                                )}
+                                                aria-hidden="true"
+                                            />
+                                        ))}
+                                    </div>
+                                    <p className="sr-only">{5} out of 5 stars</p>
+                                </div>
+                            </div>
+                            <div >
+                                <textarea ref={comment} rows="4" name="comment" id="comment" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-kazari-500 focus:ring-kazari-500 sm:text-sm" />
 
+                            </div>
+                            <div >
+                                <button
+                                    type="button"
+                                    className="w-full mt-5 bg-kazari-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-kazari-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-kazari-500"
+                                    onClick={handleSubmit}
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </> :
+                        <div className="my-4 prose prose-sm max-w-none ">
+                            Thanks for your Review
+                        </div>
+                    }
                 </div>
-                <div >
-                    <button
-                        type="button"
-                        className="w-full mt-5 bg-kazari-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-kazari-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-kazari-500"
-                        onClick={handleSubmit}
-                    >
-                        Submit
-                    </button>
-                </div>
-            </div>
+            }
             <div className="w-full max-w-2xl mx-auto lg:max-w-none lg:mt-0 lg:col-span-4">
                 <Tab.Group as="div">
                     <div className="border-b border-gray-200">
@@ -102,7 +114,7 @@ function AddReviewComponent({ id, userData }) {
                         <Tab.Panel className="-mb-10">
                             <h3 className="sr-only">Customer Reviews</h3>
 
-                            {reviews ? reviews.map((review, reviewIdx) => (
+                            {reviews.length != 0 ? reviews.map((review, reviewIdx) => (
                                 <div key={reviewIdx} className="flex text-sm text-gray-500 space-x-4">
                                     <div className="flex-none py-10">
                                         <img src={"https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png"} alt="" className="w-10 h-10 bg-gray-100 rounded-full" />
@@ -133,7 +145,7 @@ function AddReviewComponent({ id, userData }) {
                                     </div>
                                 </div>
                             )) :
-                                <div className="my-4 prose prose-sm max-w-none ">
+                                <div className="my-10 text-lg text-center prose prose-sm max-w- ">
                                     No review found
                                 </div>
                             }
@@ -148,25 +160,27 @@ function AddReviewComponent({ id, userData }) {
                 >
                     <div className="hidden sm:block">
                         <p className="text-sm text-gray-700">
-                            Showing <span className="font-medium">1</span> to <span className="font-medium">5</span> of{' '}
+                            Showing <span className="font-medium">{page}</span> to <span className="font-medium">{pagination.reviewCount < page * 5 ? pagination.reviewCount : page * 5}</span> of{' '}
                             <span className="font-medium">{pagination.reviewCount}</span> results
                         </p>
                     </div>
                     <div className="flex flex-1 justify-between sm:justify-end">
-                        <a
-                            href="#"
-                            className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                            onClick={() => setPage(page - 1)}
-                        >
-                            Previous
-                        </a>
-                        <a
-                            href="#"
-                            className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                            onClick={() => setPage(page + 1)}
-                        >
-                            Next
-                        </a>
+                        {page !== 1 &&
+                            <button
+                                className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                onClick={() => setPage(page - 1)}
+                            >
+                                Previous
+                            </button>
+                        }
+                        {page < pagination.pagesCount &&
+                            <button
+                                className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                onClick={() => setPage(page + 1)}
+                            >
+                                Next
+                            </button>
+                        }
                     </div>
                 </nav>
             </div>}
@@ -194,7 +208,7 @@ function ProductDetailsView() {
         if (userFlag) {
             navigate("/login");
         }
-        dispatch(addCheckout([product]))
+        dispatch(addCheckout([{ product, quantity: 1 }]))
         navigate("/checkout");
         // dispatch(payment({product: id, user: userData._id }, userData));
     }
@@ -344,11 +358,11 @@ function ProductDetailsView() {
                                     <CheckDelivery />
                                 </div> */}
 
-                                <div className="border-t border-gray-200 mt-10 pt-10">
+                                {/* <div className="border-t border-gray-200 mt-10 pt-10">
                                     <div className=" prose prose-sm text-gray-500">
                                         <CheckDelivery />
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="border-t border-gray-200 mt-10 pt-10">
                                     <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
                                     <div className="mt-4 prose prose-sm text-gray-500">

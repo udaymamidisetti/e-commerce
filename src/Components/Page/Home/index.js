@@ -126,7 +126,7 @@ function Home() {
                                         <div>
                                             <h3 className="font-semibold text-white">
                                                 {/* <Link to={"/products?category=" + Object.keys(categories).length !== 0 ? categories.find((item) => item.name.toLowerCase() == "Bags".toLowerCase())._id : "all"}> */}
-                                                <Link to={"/products?category=all"}>
+                                                <Link to={"/products"}>
                                                     <span className="" />
                                                     Bags
                                                 </Link>
@@ -155,7 +155,7 @@ function Home() {
                                         <div>
                                             <h3 className="font-semibold text-white">
                                                 {/* <Link to={"/products?category=" + Object.keys(categories).length !== 0 ? categories.find((item) => item.name.toLowerCase() == "Bags".toLowerCase())._id : "all"}> */}
-                                                <Link to={"/products?category=all"}>
+                                                <Link to={"/products"}>
                                                     <span className="absolute inset-0" />
                                                     APPAREL
                                                 </Link>
@@ -180,7 +180,7 @@ function Home() {
                                         <div>
                                             <h3 className="font-semibold text-white">
                                                 {/* <Link to={"/products?category=" + Object.keys(categories).length !== 0 ? categories.find((item) => item.name.toLowerCase() == "Bags".toLowerCase())._id : "all"}> */}
-                                                <Link to={"/products?category=all"}>
+                                                <Link to={"/products"}>
                                                     <span className="absolute inset-0" />
                                                     Bags
                                                 </Link>

@@ -47,7 +47,6 @@ export const getAllProducts = () => async (dispatch) => {
 export const getProduct = (id) => async (dispatch, state) => {
   try {
     dispatch({ type: ActionTypes.GET_PRODUCT });
-    // const res = await axios.get(`${ActionTypes.BASE_URL}api/product/${id}`);
     let { products } = state().productReducer;
     let productDetails = products.find((item) => item._id == id);
     if (productDetails) {
@@ -55,7 +54,12 @@ export const getProduct = (id) => async (dispatch, state) => {
         type: ActionTypes.GET_PRODUCT_SUCCESS,
         payload: productDetails,
       });
-
+    } else {
+      const res = await axios.get(`${ActionTypes.BASE_URL}api/product/${id}`);
+      dispatch({
+        type: ActionTypes.GET_PRODUCT_SUCCESS,
+        payload: res.data.data,
+      });
     }
     dispatch({ type: ActionTypes.GET_PRODUCT_FAILURE });
   } catch (error) {

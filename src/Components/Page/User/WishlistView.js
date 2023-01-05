@@ -10,7 +10,7 @@ import { payment } from '../../Redux/Actions/actions';
 import { addFav, removeFav } from './../../Redux/Actions/wishlistAction';
 import { getAllProducts, getProduct } from '../../Redux/Actions/productAction';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { addCheckout } from '../../Redux/Actions/checkoutAction';
 
@@ -124,6 +124,22 @@ function WishlistView() {
                     </div>
                 </div>
             })}
+            {array.length == 0 &&
+                <div className="w-full max-w-2xl mx-auto lg:max-w-none lg:mt-0 lg:col-span-4">
+                    <div className="my-10 text-xl font-bold text-gray-500 text-center prose prose-sm max-w- ">
+                        Wishlist empty ... add some Products
+                    </div>
+                    <div className="my-10 text-xl  text-kazari-500 text-center prose prose-sm max-w- flex justify-center">
+                        {/* <button>Go to Products</button> */}
+                        <Link to="/products"
+                            type="button"
+                            className=" item-center bg-kazari-600 font-bold border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-kazari-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-kazari-500"
+                        >
+                            Go to Products
+                        </Link>
+                    </div>
+                </div>
+            }
         </>
     );
 }
