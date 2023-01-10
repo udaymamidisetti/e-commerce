@@ -16,8 +16,11 @@ function Search() {
     const handleSearch = (e) => {
         var code = (e.keyCode ? e.keyCode : e.which);
         if (code == 13) {
-            dispatch(searchHandle(e.currentTarget.value));
-            navigate("/products?search");
+            // dispatch(searchHandle(e.currentTarget.value));
+            navigate({
+                pathname: '/products',
+                search: `?search=${encodeURIComponent(query)}`,
+            });
         }
         setQuery(e.currentTarget.value);
     }

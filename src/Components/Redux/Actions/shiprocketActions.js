@@ -3,7 +3,7 @@ import axios from "axios";
 export const userLogin = (formData, callback, verify) => async (dispatch) => {
     dispatch({ type: ActionTypes.USER_LOG_IN });
     try {
-        const response = await axios.post('https://apiv2.shiprocket.in/v1/external/auth/login', {
+        const response = await axios.post('https://apiv2.shiprocket.in/v1/external/admin/login', {
             'email': '',
             'password': ''
         },

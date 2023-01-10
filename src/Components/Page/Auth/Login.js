@@ -25,7 +25,7 @@ function Login() {
         event.preventDefault();
         let formData = new FormData(event.currentTarget);
         try {
-            const res = await axios.post(`${BASE_URL}api/auth/forgot-password`, formData);
+            const res = await axios.post(`${BASE_URL}api/admin/forgot-password`, formData);
             forgot(false);
             toast.success(res.data.message);
         } catch (error) {

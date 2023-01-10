@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 export const userLogin = (formData, callback, verify) => async (dispatch) => {
   dispatch({ type: ActionTypes.USER_LOG_IN });
   try {
-    const res = await axios.post(`${ActionTypes.BASE_URL}api/auth/login`, formData);
+    const res = await axios.post(`${ActionTypes.BASE_URL}api/admin/login`, formData);
     if (!res.data.error) {
       localStorage.setItem(process.env.REACT_APP_TOKEN, res.data.token);
       callback("/");
@@ -32,7 +32,7 @@ export const userLogin = (formData, callback, verify) => async (dispatch) => {
 export const userSignup = (formData, navigate) => async (dispatch) => {
   dispatch({ type: ActionTypes.USER_SIGNUP });
   try {
-    const res = await axios.post(`${ActionTypes.BASE_URL}api/auth/sign-up`, formData);
+    const res = await axios.post(`${ActionTypes.BASE_URL}api/admin/sign-up`, formData);
     console.log(res, "res");
     navigate("/login");
     dispatch({ type: ActionTypes.USER_SIGNUP_SUCESSS, payload: res.data.data });
@@ -50,7 +50,7 @@ export const userDataStore = (token = "") => async (dispatch) => {
 export const userForgot = (formData, forgot) => async (dispatch) => {
   // try {
   //   dispatch({ type: ActionTypes.USER_LOG_IN });
-  //   const res = await axios.post(`${ActionTypes.BASE_URL}api/auth/forgot-password`, formData);
+  //   const res = await axios.post(`${ActionTypes.BASE_URL}api/admin/forgot-password`, formData);
   //   forgot(false);
   //   dispatch({ type: ActionTypes.USER_LOG_IN_SUCESSS, payload: res.data.data });
   //   toast.success(res.data.message);

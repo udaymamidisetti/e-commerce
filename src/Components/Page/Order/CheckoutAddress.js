@@ -5,7 +5,7 @@ import { CheckCircleIcon, TrashIcon } from '@heroicons/react/solid'
 import { Link } from 'react-router-dom'
 import { BiAddToQueue } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
-import { addAddress } from "../../Redux/Actions/actions";
+import { addAddress, getAddress } from "../../Redux/Actions/actions";
 import { addCheckoutAddress } from "../../Redux/Actions/checkoutAction";
 
 function classNames(...classes) {
@@ -15,7 +15,8 @@ function classNames(...classes) {
 function CheckoutAddress() {
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false)
-    const { address } = useSelector((item) => item.reducer);
+    const [page, setPage] = useState(1);
+    const { address, addressPagination } = useSelector((item) => item.reducer);
     const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState()
     const addressForm = useRef();
     const handleForm = (e) => {
@@ -24,16 +25,25 @@ function CheckoutAddress() {
         setOpen(false);
         dispatch(addAddress(formData));
     }
+    const handleChange = (e) => {
+        dispatch(addCheckoutAddress(e))
+        setSelectedDeliveryMethod(e);
+    };
     useEffect(() => {
-        dispatch(addCheckoutAddress(selectedDeliveryMethod))
-    }, [dispatch]);
+        dispatch(getAddress(page))
+    }, [page])
+    // useEffect(() => {
+    //     console.log(selectedDeliveryMethod, "selectedDeliveryMethod");
+    // }, [dispatch]);
+    console.log(addressPagination, "addressPagination");
     return (
         <form ref={addressForm}>
             <div className="">
-                <RadioGroup value={selectedDeliveryMethod} onChange={setSelectedDeliveryMethod}>
+                <RadioGroup value={selectedDeliveryMethod} onChange={handleChange}>
                     <RadioGroup.Label className="text-lg font-medium text-gray-900">Select from Saved Address</RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+
                         {address.map((adr, i) => (
                             <RadioGroup.Option
                                 key={i}
@@ -85,6 +95,38 @@ function CheckoutAddress() {
                     </div>
                 </RadioGroup>
             </div>
+            {address && addressPagination.pagesCount > 1 && <div className="w-full max-w-2xl mx-auto lg:max-w-none lg:mt-0 lg:col-span-4">
+                <nav
+                    className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+                    aria-label="Pagination"
+                >
+                    <div className="hidden sm:block">
+                        <p className="text-sm text-gray-700">
+                            Showing <span className="font-medium">{page}</span> to <span className="font-medium">{addressPagination.addressCount < page * 5 ? addressPagination.addressCount : page * 5}</span> of{' '}
+                            <span className="font-medium">{addressPagination.addressCount}</span> results
+                        </p>
+                    </div>
+                    <div className="flex flex-1 justify-between sm:justify-end">
+                        {page !== 1 &&
+                            <button
+                                className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                onClick={() => setPage(page - 1)}
+                            >
+                                Previous
+                            </button>
+                        }
+                        {page < addressPagination.pagesCount &&
+                            <button
+                                className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                onClick={() => setPage(page + 1)}
+                            >
+                                Next
+                            </button>
+                        }
+                    </div>
+                </nav>
+            </div>
+            }
             <div className={open ? "mt-10 pt-10 border-t border-gray-200 " : "hidden"}>
                 <h2 className="text-lg font-medium text-gray-900">Contact information </h2>
 

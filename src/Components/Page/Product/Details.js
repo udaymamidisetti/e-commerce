@@ -7,7 +7,7 @@ import { BASE_URL } from '../../Redux/Actions/actionTypes'
 import { FaRupeeSign, FaShareAlt } from 'react-icons/fa'
 import { Carousel } from 'react-responsive-carousel';
 import axios from 'axios'
-import { getProduct } from '../../Redux/Actions/productAction'
+import { getProduct, getProductAttr } from '../../Redux/Actions/productAction'
 import Loader from '../../Common/Loader'
 import { IoLogoWhatsapp } from 'react-icons/io'
 import { payment } from '../../Redux/Actions/actions'
@@ -116,6 +116,7 @@ function ProductDetails() {
     const navigate = useNavigate();
     useEffect(() => {
         dispatch(getProduct(id));
+        dispatch(getProductAttr(id));
     }, [dispatch])
 
     return (

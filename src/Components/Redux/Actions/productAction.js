@@ -66,6 +66,18 @@ export const getProduct = (id) => async (dispatch, state) => {
     dispatch({ type: ActionTypes.GET_PRODUCT_FAILURE });
   }
 };
+export const getProductAttr = (id) => async (dispatch, state) => {
+  try {
+    dispatch({ type: ActionTypes.GET_PRODUCT_ATTR });
+    const res = await axios.get(`${ActionTypes.BASE_URL}api/product-attr/${id}`);
+    dispatch({
+      type: ActionTypes.GET_PRODUCT_ATTR_SUCCESS,
+      payload: res.data.data,
+    });
+  } catch (error) {
+    dispatch({ type: ActionTypes.GET_PRODUCT_ATTR_FAILURE });
+  }
+};
 export const setSlider = (value) => async (dispatch) => {
   try {
     dispatch({

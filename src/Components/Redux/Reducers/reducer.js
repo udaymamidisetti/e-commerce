@@ -3,7 +3,8 @@ import * as ActionTypes from "../Actions/actionTypes";
 const initialState = {
   userLoading: false,
   userData: {},
-  address: []
+  address: [],
+  addressPagination: { pagesCount: 0, addressCount: 0 },
 };
 
 const reducer = (state = initialState, action) => {
@@ -41,7 +42,7 @@ const reducer = (state = initialState, action) => {
     case ActionTypes.ADD_ADDRESS:
       return { ...state, loading: true };
     case ActionTypes.ADD_ADDRESS_SUCCESS:
-      return { ...state, address: action.payload, loading: false };
+      return { ...state, address: action.payload.data, addressPagination: action.payload.pagination, loading: false };
     case ActionTypes.ADD_ADDRESS_FAILURE:
       return { ...state, loading: false };
 
@@ -49,7 +50,7 @@ const reducer = (state = initialState, action) => {
     case ActionTypes.GET_ADDRESS:
       return { ...state, loading: true };
     case ActionTypes.GET_ADDRESS_SUCCESS:
-      return { ...state, address: action.payload, loading: false };
+      return { ...state, address: action.payload.data, addressPagination: action.payload.pagination, loading: false };
     case ActionTypes.GET_ADDRESS_FAILURE:
       return { ...state, loading: false };
 

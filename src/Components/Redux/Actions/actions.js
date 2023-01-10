@@ -32,10 +32,10 @@ export const editProfileData = (payload, id) => (dispatch) => {
     dispatch({ type: ActionTypes.UPDATE_USER_PROFILE_FAILURE });
   }
 };
-export const getAddress = (payload, id) => async (dispatch) => {
+export const getAddress = (page) => async (dispatch) => {
   dispatch({ type: ActionTypes.GET_ADDRESS });
 
-  let url = `${ActionTypes.BASE_URL}api/address/user`;
+  let url = `${ActionTypes.BASE_URL}api/address?limit=${5}&page=${page}`;
   try {
     const { data } = await axios.get(url, {
       headers: {
@@ -44,7 +44,7 @@ export const getAddress = (payload, id) => async (dispatch) => {
     });
     dispatch({
       type: ActionTypes.GET_ADDRESS_SUCCESS,
-      payload: data.data,
+      payload: data,
     });
   } catch (error) {
     console.log(`error occured => ${error.message}`);
@@ -63,7 +63,7 @@ export const addAddress = (payload, id) => async (dispatch) => {
     });
     dispatch({
       type: ActionTypes.ADD_ADDRESS_SUCCESS,
-      payload: data.data,
+      payload: data,
     });
   } catch (error) {
     console.log(`error occured =>  ${error.message}`);

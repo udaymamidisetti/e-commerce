@@ -92,6 +92,7 @@ function Home() {
     }
     const productDetails = (id) => {
         // dispatch(getProduct(id));
+        console.log("productDetails");
         navigate("/products/" + id);
     }
     console.log(Object.keys(categories).length, "categories");
@@ -247,11 +248,13 @@ function Home() {
                                         {product.map((products, i) => (
                                             <div key={i} className="group relative p-4 border-r border-b border-gray-200 sm:p-6" >
                                                 <div className="rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
-                                                    <img onClick={() => productDetails(products._id)}
-                                                        src={BASE_URL + products.thumbnail}
-                                                        alt={products.name + " Image"}
-                                                        className="w-full h-[15rem] object-contain object-center"
-                                                    />
+                                                    <div onClick={() => productDetails(products._id)}>
+                                                        <img
+                                                            src={BASE_URL + products.thumbnail}
+                                                            alt={products.name + " Image"}
+                                                            className="w-full h-[15rem] object-contain object-center"
+                                                        />
+                                                    </div>
 
                                                     <HeartIcon onClick={() => wishlistHandler(Object.hasOwn(wishlist, products._id), products._id)} className={Object.hasOwn(wishlist, products._id) ? " fill-kazari-100 stroke-kazari-100 h5 w-5 bg-transparent absolute right-3 top-3 hover:cursor-pointer" : " hover:fill-kazari-100 hover:stroke-kazari-100 h5 w-5 bg-transparent absolute right-3 top-3 hover:cursor-pointer"} />
 
@@ -269,7 +272,7 @@ function Home() {
                                                             {products.price}
                                                         </span>
                                                     </div>
-                                                    <div className="flex flex-1 justify-center mt-3 items-center">
+                                                    {/* <div className="flex flex-1 justify-center mt-3 items-center">
                                                         <button
                                                             onClick={() => handleCheckout(products)}
                                                             type="button"
@@ -280,7 +283,7 @@ function Home() {
                                                         <button onClick={() => handleCart(products._id)} type="button" className="ml-2 inline-flex justify-center items-center w-1/2 px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-kazari-100 hover:bg-kazari-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-kazari-500">
                                                             Add to Cart
                                                         </button>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                             </div>
                                         ))}

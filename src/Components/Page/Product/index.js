@@ -15,7 +15,7 @@ function classNames(...classes) {
 function Product() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { products, slider, search } = useSelector((item) => item.productReducer);
+    const { products, slider } = useSelector((item) => item.productReducer);
     const { wishlist } = useSelector((item) => item.wishlistReducer);
     const userData = useSelector((item) => item.reducer.userData);
     const userFlag = Object.entries(userData).length == 0;
@@ -26,7 +26,15 @@ function Product() {
             return item.price < slider;
         }
     });
-    if (searchParams.get("search")) {
+    let search = searchParams.get("search");
+    console.log(search, "search");
+    console.log(Object.fromEntries([...searchParams]).hasOwnProperty("search"), "searchParams.entries()");
+    if (Object.fromEntries([...searchParams]).hasOwnProperty("search")) {
+        if (search == "") {
+            navigate("/products");
+        }
+    }
+    if (search) {
         tempProducts = tempProducts.filter((product) => product.name.toLowerCase().replace(/\s+/g, '').includes(search.toLowerCase().replace(/\s+/g, '')))
     }
     // tempProducts = (search === '') ? tempProducts : 
@@ -89,32 +97,14 @@ function Product() {
                                 {product.name}
                             </a>
                         </span>
-                        {/* <div className="mt-3 flex flex-col items-center">
-                        <p className="sr-only">{product.rating} out of 5 stars</p>
-                        <div className="flex items-center">
-                            {[0, 1, 2, 3, 4].map((rating) => (
-                                <StarIcon
-                                    key={rating}
-                                    className={classNames(
-                                        product.rating > rating ? 'text-yellow-400' : 'text-gray-200',
-                                        'flex-shrink-0 h-5 w-5'
-                                    )}
-                                    aria-hidden="true"
-                                />
-                            ))}
-                        </div>
-                        <p className="mt-1 text-sm text-gray-500">{product.reviewCount} reviews</p>
-                    </div> */}
-                        {/* <div className="mt-3 flex flex-col items-center">
-                    <FaRupeeSign className='flex-shrink-0 h-5 w-5' /><span className="mt-4 text-base font-medium text-gray-900">{product.price}</span>
-                    </div> */}
+
                         <div className="flex flex-1 justify-center mt-2 items-center">
                             <FaRupeeSign className="flex-shrink-0 h-5 w-5 " aria-hidden="true" />
                             <span href="#" className="ml-1 text-xl font-medium">
                                 {product.price}
                             </span>
                         </div>
-                        <div className="flex flex-1 justify-center mt-3 items-center">
+                        {/* <div className="flex flex-1 justify-center mt-3 items-center">
                             <button
                                 onClick={() => handleCheckout(product)}
                                 type="button"
@@ -125,7 +115,7 @@ function Product() {
                             <button onClick={() => handleCart(product._id)} type="button" className="ml-2 inline-flex justify-center items-center w-1/2 px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-kazari-100 hover:bg-kazari-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-kazari-500">
                                 Add to Cart
                             </button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             })}

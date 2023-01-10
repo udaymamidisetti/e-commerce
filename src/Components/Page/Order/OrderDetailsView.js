@@ -20,17 +20,28 @@ function OrderDetailsView() {
     return (
         <div className="bg-white">
             <div className="max-w-3xl mx-auto px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-                <div className="max-w-xl">
-                    <h1 className="text-sm font-semibold uppercase tracking-wide text-red-600">Payment Failed</h1>
-                    <p className="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">It's on the way!</p>
-                    <p className="mt-2 text-base text-gray-500">Your order #14034056 has shipped and will be with you soon.</p>
+                {order.payment_successful == 1 ?
+                    <div className="max-w-xl">
+                        <h1 className="text-sm font-semibold uppercase tracking-wide text-green-600">Payment Successful</h1>
+                        <p className="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">It's on the way!</p>
+                        <p className="mt-2 text-base text-gray-500">Your order #{order.razorpayOrderId} has shipped and will be with you soon.</p>
 
-                    <dl className="mt-12 text-sm font-medium">
-                        <dt className="text-gray-900">Tracking number</dt>
-                        <dd className="text-indigo-600 mt-2">51547878755545848512</dd>
-                    </dl>
-                </div>
+                        <dl className="mt-12 text-sm font-medium">
+                            <dt className="text-gray-900">Tracking number</dt>
+                            <dd className="text-indigo-600 mt-2">51547878755545848512</dd>
+                        </dl>
+                    </div> :
+                    <div className="max-w-xl">
+                        <h1 className="text-sm font-semibold uppercase tracking-wide text-red-600">Payment Failed</h1>
+                        {/* <p className="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">It's on the way!</p> */}
+                        <p className="mt-2 text-base text-gray-500">Your order #14034056 Payment Failed, Try again Later.</p>
 
+                        <dl className="mt-12 text-sm font-medium">
+                            <dt className="text-gray-900">Tracking number</dt>
+                            <dd className="text-indigo-600 mt-2">{order.trackId ? "1335555446688" : "768546545876"}</dd>
+                        </dl>
+                    </div>
+                }
                 <div className="mt-10 border-t border-gray-200">
                     <h2 className="sr-only">Your order</h2>
 
@@ -74,7 +85,7 @@ function OrderDetailsView() {
                                 <dt className="font-medium text-gray-900">Shipping address</dt>
                                 <dd className="mt-2 text-gray-700">
                                     <address className="not-italic">
-                                        <span className="block">Kristin Watson</span>
+                                        <span className="block">{order.address}</span>
                                         <span className="block">7363 Cynthia Pass</span>
                                         <span className="block">Toronto, ON N3Y 4H8</span>
                                     </address>

@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useReducer, useRef, useState } from 'react'
 import { StarIcon } from '@heroicons/react/solid'
-import { Tab } from '@headlessui/react'
+import { Tab, RadioGroup } from '@headlessui/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { BASE_URL } from '../../Redux/Actions/actionTypes'
@@ -42,12 +42,13 @@ function AddReviewComponent({ id, userData }) {
         setReviewFlag(false);
     }
     useEffect(() => {
+        console.log("kkdlfklklgfkl");
         dispatch(getReview(id, page))
     }, [page])
 
     return (
         <>
-            {reviewUserFlag &&
+            {!reviewUserFlag &&
                 <div className="w-full max-w-2xl mx-auto mt-16 lg:max-w-none lg:mt-0 lg:col-span-4">
                     {addReviewFlag ?
                         <>
@@ -191,8 +192,9 @@ function AddReviewComponent({ id, userData }) {
 function ProductDetailsView() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { productDetails } = useSelector((item) => item.productReducer);
+    const { productDetails, productDetailsAttr } = useSelector((item) => item.productReducer);
     const { wishlistLoading, wishlist } = useSelector((item) => item.wishlistReducer);
+    const [selectedSize, setSelectedSize] = useState(productDetailsAttr.length !== 0 ? productDetailsAttr[0] : {})
     // const wishlistFlag = Object.hasOwn(wishlist, productDetails._id);
     const wishlistFlag = false;
     const { userData } = useSelector((item) => item.reducer);
@@ -208,7 +210,7 @@ function ProductDetailsView() {
         if (userFlag) {
             navigate("/login");
         }
-        dispatch(addCheckout([{ product, quantity: 1 }]))
+        dispatch(addCheckout([{ product, quantity: 1, productAttr: selectedSize }]))
         navigate("/checkout");
         // dispatch(payment({product: id, user: userData._id }, userData));
     }
@@ -329,12 +331,60 @@ function ProductDetailsView() {
                                     </div>
                                 </div>
 
-                                <p className="text-gray-500 my-6" dangerouslySetInnerHTML={{ __html: productDetails.description }}></p>
+                                <p className="text-gray-500 my-6" dangerouslySetInnerHTML={{ __html: productDetails.shortdescription }}></p>
+
+                                {productDetailsAttr.length != 0 && <div className="sm:flex sm:justify-between">
+                                    {/* Size selector  value={selectedSize} onChange={setSelectedSize} */}
+                                    <RadioGroup value={selectedSize} onChange={setSelectedSize}>
+                                        <RadioGroup.Label className="block text-sm font-medium text-gray-700"></RadioGroup.Label>
+                                        <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                            {productDetailsAttr.map((size) => (
+                                                <RadioGroup.Option
+                                                    as="div"
+                                                    key={size.name}
+                                                    value={size}
+                                                    className={({ active }) =>
+                                                        classNames(
+                                                            active ? 'ring-2 ring-kazari-500' : '',
+                                                            'relative block cursor-pointer rounded-lg border border-gray-300 p-4 focus:outline-none'
+                                                        )
+                                                    }
+                                                >
+                                                    {({ active, checked }) => (
+                                                        <>
+                                                            <RadioGroup.Label as="p" className="text-base font-medium text-gray-900">
+                                                                {size.name}
+                                                            </RadioGroup.Label>
+                                                            <RadioGroup.Description as="p" className="mt-1 text-sm text-gray-500">
+                                                                {size.description}
+                                                                <div className="flex flex-1  mt-2 items-center text-kazari-500">
+                                                                    <FaRupeeSign className="flex-shrink-0 h-5 w-5 " aria-hidden="true" />
+                                                                    <span className="ml-1 text-[1rem] font-bold">
+                                                                        {new Intl.NumberFormat('en-IN').format(parseInt(size.price).toFixed(2)) + ".00"}
+                                                                    </span>
+
+                                                                </div>
+                                                            </RadioGroup.Description>
+                                                            <div
+                                                                className={classNames(
+                                                                    active ? 'border' : 'border-2',
+                                                                    checked ? 'border-kazari-500' : 'border-transparent',
+                                                                    'pointer-events-none absolute -inset-px rounded-lg'
+                                                                )}
+                                                                aria-hidden="true"
+                                                            />
+                                                        </>
+                                                    )}
+                                                </RadioGroup.Option>
+                                            ))}
+                                        </div>
+                                    </RadioGroup>
+                                </div>}
 
                                 <div className="flex flex-1  mt-2 items-center">
                                     <FaRupeeSign className="flex-shrink-0 h-5 w-5 " aria-hidden="true" />
                                     <span className="ml-1 text-[2rem] font-bold">
-                                        {new Intl.NumberFormat('en-IN').format(parseInt(productDetails.price).toFixed(2)) + ".00"}
+                                        {new Intl.NumberFormat('en-IN').format(parseInt(Object.entries(selectedSize).length !== 0 ? selectedSize.price : productDetails.price).toFixed(2)) + ".00"}
                                     </span>
 
                                 </div>
@@ -365,12 +415,8 @@ function ProductDetailsView() {
                                 </div> */}
                                 <div className="border-t border-gray-200 mt-10 pt-10">
                                     <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
-                                    <div className="mt-4 prose prose-sm text-gray-500">
-                                        <ul role="list">
-                                            {/* {productDetails.highlights.map((highlight, i) => (
-                                        <li key={i}>{highlight}</li>
-                                    ))} */}
-                                        </ul>
+                                    <div className="mt-4 prose prose-sm text-gray-500" dangerouslySetInnerHTML={{ __html: productDetails.description }}>
+
                                     </div>
                                 </div>
                             </div>

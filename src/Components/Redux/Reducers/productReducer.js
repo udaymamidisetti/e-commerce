@@ -7,6 +7,7 @@ const initialState = {
   reviews: [],
   pagination: { pagesCount: 0, reviewCount: 0 },
   productDetails: {},
+  productDetailsAttr: [],
   slider: 10000,
   search: ""
 };
@@ -21,6 +22,13 @@ const productReducer = (state = initialState, action) => {
     case ActionTypes.GET_PRODUCT_SUCCESS:
       return { ...state, productDetails: action.payload, loading: false };
     case ActionTypes.GET_PRODUCT_FAILURE:
+      return { ...state, loading: false };
+
+    case ActionTypes.GET_PRODUCT_ATTR:
+      return { ...state, loading: true };
+    case ActionTypes.GET_PRODUCT_ATTR_SUCCESS:
+      return { ...state, productDetailsAttr: action.payload, loading: false };
+    case ActionTypes.GET_PRODUCT_ATTR_FAILURE:
       return { ...state, loading: false };
 
     // Review

@@ -13,14 +13,27 @@ function OrderSummary() {
     const navigate = useNavigate();
     const { checkout, address } = useSelector((item) => item.checkoutReducer);
     const { userData } = useSelector((item) => item.reducer);
-    console.log(checkout, "checkout");
     const setTotalHandle = () => {
         let totalPrice = 0;
-        checkout.map(({ product, quantity }) => {
-            totalPrice += parseInt(quantity) * parseInt(product.price);
+        let tax = 0;
+        let taxTotalPrice = 0;
+
+        checkout.map(({ product, quantity, productAttr }) => {
+            if (Object.entries(productAttr).length != 0) {
+                totalPrice += parseFloat(quantity) * parseFloat(productAttr.price);
+                if (product.tax) {
+                    tax += (parseFloat(quantity) * parseFloat(productAttr.price)) * (parseFloat(product.tax) / 100);
+                }
+            } else {
+                totalPrice += parseFloat(quantity) * parseFloat(product.price);
+                if (product.tax) {
+                    tax += (parseFloat(quantity) * parseFloat(product.price)) * (parseFloat(product.tax) / 100);
+                }
+            }
         })
-        return parseInt(totalPrice);
+        return { totalPrice: parseFloat(totalPrice), tax: parseFloat(tax) };
     }
+    console.log(setTotalHandle(), "setTotalHandle");
     // const handleQuantity = (id, prdQuantity) => {
     //     let temp = quantity;
     //     temp[id] = parseInt(prdQuantity);
@@ -31,14 +44,15 @@ function OrderSummary() {
     const handleCheckoutRemove = (id) => {
         removeCheckout(id);
     }
+    console.log(address, "address");
     const handlePayment = () => {
         if (address == undefined || Object.keys(address).length == 0) {
             toast.error("Please select delivery address or provide delivery address");
             return;
         }
         let ids = [];
-        checkout.map(({ _id }) => {
-            ids.push(_id);
+        checkout.map(({ product }) => {
+            ids.push(product._id);
         })
         if (ids) {
             dispatch(payment({ product: ids, user: userData._id, address }, userData, navigate));
@@ -51,7 +65,7 @@ function OrderSummary() {
             <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">
                 <h3 className="sr-only">Items in your cart</h3>
                 <ul role="list" className="divide-y divide-gray-200">
-                    {checkout.length !== 0 && checkout.map(({ product, quantity }, i) => (
+                    {checkout.length !== 0 && checkout.map(({ product, quantity, productAttr }, i) => (
                         <li key={i} className="flex py-6 px-4 sm:px-6">
                             <div className="flex-shrink-0">
                                 <img src={BASE_URL + product.thumbnail} alt={product.name + " Image"} className="w-20 rounded-md" />
@@ -83,7 +97,7 @@ function OrderSummary() {
                                     <div className="flex flex-1 justify-left mt-2 items-center">
                                         <FaRupeeSign className="flex-shrink-0 h-4 w-4 " aria-hidden="true" />
                                         <span href="#" className="ml-1 text-base font-medium">
-                                            {product.price}
+                                            {Object.entries(productAttr).length == 0 ? product.price : productAttr.price}
                                         </span>
                                     </div>
                                     <div className="ml-4">
@@ -121,7 +135,7 @@ function OrderSummary() {
                             <div className="flex flex-1 justify-left mt-2 items-center">
                                 <FaRupeeSign className="flex-shrink-0 h-3 w-3 " aria-hidden="true" />
                                 <span href="#" className="ml-1 text-base font-medium">
-                                    {(setTotalHandle() - ((setTotalHandle() / 100) * 18)).toFixed(2)}
+                                    {(setTotalHandle().totalPrice).toFixed(2)}
                                 </span>
                             </div></dd>
                     </div>
@@ -130,8 +144,8 @@ function OrderSummary() {
                         <dd className="text-sm font-medium text-gray-900">Free shipping</dd>
                     </div>
                     <div className="flex items-center justify-between">
-                        <dt className="text-sm">Taxes (18%)</dt>
-                        <dd className="text-sm font-medium text-gray-900">{((setTotalHandle() / 100) * 18).toFixed(2)}</dd>
+                        <dt className="text-sm">Taxes</dt>
+                        <dd className="text-sm font-medium text-gray-900">{(setTotalHandle().tax).toFixed(2)}</dd>
                     </div>
                     <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                         <dt className="text-base font-medium">Total</dt>
@@ -139,7 +153,7 @@ function OrderSummary() {
                             <div className="flex flex-1 justify-left mt-2 items-center">
                                 <FaRupeeSign className="flex-shrink-0 h-3 w-3 " aria-hidden="true" />
                                 <span href="#" className="ml-1 text-base font-medium">
-                                    {setTotalHandle()}
+                                    {(setTotalHandle().totalPrice + setTotalHandle().tax).toFixed(2)}
                                 </span>
                             </div>
                         </dd>
