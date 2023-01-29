@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import Logo from '../../Common/Logo.svg'
 function InvoiceView() {
     const { order } = useSelector((item) => item.orderReducer);
-    console.log(order, "order");
+    console.log(order, "Order");
+    console.log(Object.entries(order), "Order");
+    // return (<>klfksdlkf</>);
     return (
         <main>
-            {order && <>
+            {Object.entries(order).length != 0 && <>
                 <div className="block justify-between items-center p-4 my-6 mx-4 bg-white rounded-2xl shadow-xl shadow-gray-200 sm:flex">
                     <div className="flex items-center mb-3 sm:divide-x sm:divide-gray-100 sm:mb-0">
 
@@ -79,9 +81,9 @@ function InvoiceView() {
                                 <div className="mb-4 text-base font-bold text-gray-900 uppercase">
                                     Bill to
                                 </div>
-                                <address className="text-base font-normal text-gray-500">
+                                <div className="text-base font-normal text-gray-500">
                                     {order.address.address + order.address.apartment + " - " + order.address.pincode}
-                                </address>
+                                </div>
                             </div>
                             <div className="flex flex-col my-8">
                                 <div className="overflow-x-auto border-b border-gray-200">
@@ -118,25 +120,37 @@ function InvoiceView() {
                                                     </tr>
                                                 </thead>
                                                 <tbody className="text-gray-900 bg-white">
-                                                    {order.product.map((elem, i) =>
+                                                    {order.order_items.map(({ product, quantity, productAttr }, i) =>
                                                         <tr key={i}>
                                                             <td className="p-4 text-sm font-normal whitespace-nowrap">
                                                                 <div className="text-base font-semibold">
-                                                                    {elem.name}
-                                                                </div>
-                                                                <div className="text-sm font-normal text-gray-500">
-                                                                    Html components
+                                                                    {product.name}
                                                                 </div>
                                                             </td>
-                                                            <td className="p-4 text-base font-normal text-gray-500 whitespace-nowrap">
-                                                                {elem.price}
-                                                            </td>
-                                                            <td className="p-4 text-base font-semibold text-gray-900 whitespace-nowrap">
-                                                                1
-                                                            </td>
-                                                            <td className="p-4 text-base font-semibold whitespace-nowrap">
-                                                                {elem.price}
-                                                            </td>
+                                                            {productAttr ?
+                                                                <>
+                                                                    <td className="p-4 text-base font-normal text-gray-500 whitespace-nowrap">
+                                                                        {productAttr.price}
+                                                                    </td>
+                                                                    <td className="p-4 text-base font-semibold text-gray-900 whitespace-nowrap">
+                                                                        {quantity}
+                                                                    </td>
+                                                                    <td className="p-4 text-base font-semibold whitespace-nowrap">
+                                                                        {quantity * productAttr.price}
+                                                                    </td>
+                                                                </> :
+                                                                <>
+                                                                    <td className="p-4 text-base font-normal text-gray-500 whitespace-nowrap">
+                                                                        {product.price}
+                                                                    </td>
+                                                                    <td className="p-4 text-base font-semibold text-gray-900 whitespace-nowrap">
+                                                                        {quantity}
+                                                                    </td>
+                                                                    <td className="p-4 text-base font-semibold whitespace-nowrap">
+                                                                        {quantity * product.price}
+                                                                    </td>
+                                                                </>
+                                                            }
                                                         </tr>
                                                     )}
 

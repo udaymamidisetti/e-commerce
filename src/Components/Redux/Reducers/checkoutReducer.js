@@ -23,6 +23,9 @@ const checkoutReducer = (state = initialState, action) => {
     case ActionTypes.ADD_CHECKOUT_FAILURE:
       return { ...state, loading: false };
 
+    case ActionTypes.USER_LOG_OUT:
+      return { ...initialState };
+
     case ActionTypes.ADD_CHECKOUT_CART:
       return { ...state, loading: true };
     case ActionTypes.ADD_CHECKOUT_CART_SUCCESS:

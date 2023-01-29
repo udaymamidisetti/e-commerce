@@ -1,6 +1,15 @@
+import { useEffect } from "react";
 import img from "../../Assets/aboli_about.jpg";
 function AboutUs() {
     let url = window.location.origin;
+    useEffect(() => {
+        const body = document.querySelector('#root');
+
+        body.scrollIntoView({
+            behavior: 'smooth'
+        }, 500)
+
+    }, []);
     return (
         <div className="relative -mt-[5.75rem] overflow-hidden pt-[5.75rem] pb-[2.75rem]">
             <img src="/img/beams-basic.png" alt="" className="absolute top-0 left-1/2 -ml-[39rem] w-[113.125rem] max-w-none" />
@@ -32,7 +41,7 @@ function AboutUs() {
                     <h2 className="pt-10 pb-4">Founder</h2>
                     <div className="flex flex-row justify-between">
                         <div className=" basis-1/3 mx-5">
-                            <img src={img} alt={"Aboli Image"} className="w-full h-full object-contain" />
+                            <img src={img} alt={"Aboli Image"} className="w-full h-full object-contain rounded-sm" />
                         </div>
                         <div className=" basis-2/3">
                             <p>

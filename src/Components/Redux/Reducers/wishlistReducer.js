@@ -28,6 +28,8 @@ const wishlistReducer = (state = initialState, action) => {
     case ActionTypes.REMOVE_WISHLIST_FAILURE:
       return { ...state, loading: false };
 
+    case ActionTypes.USER_LOG_OUT:
+      return { ...state, wishlist: {}, loading: false };
     default:
       return state;
   }

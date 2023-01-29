@@ -36,6 +36,7 @@ function App() {
   useEffect(() => {
     dispatch(getAllProducts());
   }, [dispatch]);
+
   return (
     <ErrorBoundary
       FallbackComponent={<Error />}

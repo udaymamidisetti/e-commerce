@@ -13,7 +13,7 @@ import { addFav, removeFav } from './../../Redux/Actions/wishlistAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCheckout } from '../../Redux/Actions/checkoutAction';
 import { Carousel } from 'react-responsive-carousel';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // const favorites = [
 //     {
 //         id: 1,
@@ -95,6 +95,14 @@ function Home() {
         console.log("productDetails");
         navigate("/products/" + id);
     }
+    useEffect(() => {
+        const body = document.querySelector('#root');
+
+        body.scrollIntoView({
+            behavior: 'smooth'
+        }, 500)
+
+    }, []);
     console.log(Object.keys(categories).length, "categories");
     return (
         <>

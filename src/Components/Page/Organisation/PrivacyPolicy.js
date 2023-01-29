@@ -1,5 +1,15 @@
+import { useEffect } from "react";
+
 function PrivacyPolicy() {
     let url = window.location.origin;
+    useEffect(() => {
+        const body = document.querySelector('#root');
+
+        body.scrollIntoView({
+            behavior: 'smooth'
+        }, 500)
+
+    }, []);
     return (
         <div className="relative -mt-[5.75rem] overflow-hidden pt-[5.75rem] pb-[2.75rem]">
             <img src="/img/beams-basic.png" alt="" className="absolute top-0 left-1/2 -ml-[39rem] w-[113.125rem] max-w-none" />

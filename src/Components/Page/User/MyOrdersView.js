@@ -17,7 +17,7 @@ function MyOrdersView() {
     const { allOrders } = useSelector((item) => item.orderReducer);
     return (
         <div className="space-y-16 sm:space-y-24">
-            {allOrders.map((order, i) => (
+            {allOrders.length != 0 ? allOrders.map((order, i) => (
                 <div key={i}>
                     <h3 className="sr-only">
                         Order placed on <time dateTime={order.createdAt}>{new Date(order.createdAt).toLocaleDateString()}</time>
@@ -61,10 +61,10 @@ function MyOrdersView() {
                                             <span className="sr-only">{order.number}</span>
                                             to={"/order/invoice/" + order._id}
                                         </a> */}
-                            <Link to={"/order/invoice/" + order._id}
+                            <Link to={"/user/orders/" + order._id}
                                 className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-kazari-500 md:w-auto"
                             >
-                                View Invoice
+                                View Order
                                 <span className="sr-only">for order {order._id}</span>
                             </Link>
                         </div>
@@ -72,58 +72,58 @@ function MyOrdersView() {
 
                     <div className="mt-6 flow-root px-4 sm:mt-10 sm:px-0">
                         <div className="-my-6 divide-y divide-gray-200 sm:-my-10">
-                            {order.product.map((prd, i) => (
+                            {order.order_items.map(({ product, quantity, productAttr }, i) => (
                                 <div key={i} className="flex py-6 sm:py-10">
                                     <div className="min-w-0 flex-1 lg:flex lg:flex-col">
                                         <div className="lg:flex-1">
                                             <div className="sm:flex">
                                                 <div>
-                                                    <h4 className="font-medium text-gray-900">{prd.name}</h4>
-                                                    <p className="hidde pl-5 mt-2 text-sm text-gray-500 sm:block" dangerouslySetInnerHTML={{ __html: prd.description }} />
+                                                    <h4 className="font-medium text-gray-900">{product.name}</h4>
+                                                    <p className="hidde pl-5 mt-2 text-sm text-gray-500 sm:block" dangerouslySetInnerHTML={{ __html: product.description }} />
                                                 </div>
                                                 <span className="mt-1 font-medium text-gray-900 sm:mt-0 sm:ml-6">
                                                     <div className="flex flex-1 justify-center mt-2 items-center">
                                                         <FaRupeeSign className="flex-shrink-0 h-5 w-5 " aria-hidden="true" />
                                                         <span href="#" className="ml-1 text-xl font-medium">
-                                                            {prd.price}
+                                                            {product.price}
                                                         </span>
                                                     </div>
                                                 </span>
                                             </div>
                                             <div className="mt-2 flex text-sm font-medium sm:mt-4">
-                                                <Link to={"/products/" + prd._id} className="text-kazari-600 hover:text-kazari-500">
+                                                <Link to={"/products/" + product._id} className="text-kazari-600 hover:text-kazari-500">
                                                     View Product
                                                 </Link>
                                                 <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
-                                                    <button onClick={() => handleCheckout(prd)} to={"/"} className="text-kazari-600 hover:text-kazari-500">
+                                                    <button onClick={() => handleCheckout(product)} to={"/"} className="text-kazari-600 hover:text-kazari-500">
                                                         Buy Again
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="mt-6 font-medium">
-                                            {prd.status === 'delivered' ? (
+                                            {product.status === 'delivered' ? (
                                                 <div className="flex space-x-2">
                                                     <CheckIcon className="flex-none w-6 h-6 text-green-500" aria-hidden="true" />
                                                     <p>
                                                         Delivered
                                                         <span className="hidden sm:inline">
                                                             {' '}
-                                                            on <time dateTime={prd.datetime}>{prd.date}</time>
+                                                            on <time dateTime={product.datetime}>{product.date}</time>
                                                         </span>
                                                     </p>
                                                 </div>
-                                            ) : prd.status === 'out-for-delivery' ? (
+                                            ) : product.status === 'out-for-delivery' ? (
                                                 <p>Out for delivery</p>
-                                            ) : prd.status === 'cancelled' ? (
+                                            ) : product.status === 'cancelled' ? (
                                                 <p className="text-gray-500">Cancelled</p>
                                             ) : null}
                                         </div>
                                     </div>
                                     <div className="ml-4 flex-shrink-0 sm:m-0 sm:mr-6 sm:order-first">
                                         <img
-                                            src={BASE_URL + prd.thumbnail}
-                                            alt={prd.name}
+                                            src={BASE_URL + product.thumbnail}
+                                            alt={product.name}
                                             className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52"
                                         />
                                     </div>
@@ -133,6 +133,21 @@ function MyOrdersView() {
                     </div>
                 </div>
             ))
+                :
+                <div className="w-full max-w-2xl mx-auto lg:max-w-none lg:mt-0 lg:col-span-4">
+                    <div className="my-10 text-xl font-bold text-gray-500 text-center prose prose-sm max-w- ">
+                        Orders empty ... add some Orders
+                    </div>
+                    <div className="my-10 text-xl  text-kazari-500 text-center prose prose-sm max-w- flex justify-center">
+                        {/* <button>Go to Products</button> */}
+                        <Link to="/products"
+                            type="button"
+                            className=" item-center bg-kazari-600 font-bold border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base  text-white hover:bg-kazari-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-kazari-500"
+                        >
+                            Go to Products
+                        </Link>
+                    </div>
+                </div>
             }
         </div >
     );

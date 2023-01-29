@@ -9,7 +9,7 @@ function OrderDetails() {
     const { id } = useParams();
     useEffect(() => {
         dispatch(getOrderDetails(id));
-    }, []);
+    }, [dispatch]);
     return (
         <OrderDetailsView />
     )

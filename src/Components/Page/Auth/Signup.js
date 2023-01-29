@@ -3,13 +3,49 @@ import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../Common/Logo.svg';
 import { userSignup } from '../../Redux/Actions/userActions';
 import { useDispatch } from 'react-redux';
+import { useEffect, useRef, useState } from 'react';
+import useFetch from '../../../hooks/useFetch';
 function SignUp() {
     const navigate = useNavigate();
+    const [flag, setFlag] = useState(false);
+    const otpInput = useRef();
+    const [otp, otpFlag] = useState(false);
+    const [readonly, setReadonly] = useState(false);
     const dispatch = useDispatch();
+    const { handleGoogle, loading, error } = useFetch(
+        "http://localhost:5000/api/auth/sign-up-google"
+    );
+    useEffect(() => {
+        /* global google */
+        if (window.google) {
+            google.accounts.id.initialize({
+                client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+                callback: handleGoogle,
+            });
+
+            google.accounts.id.renderButton(document.getElementById("signUpDiv"), {
+                // type: "standard",
+                theme: "filled_blue",
+                size: "large",
+                text: "continue_with",
+                shape: "rectangular",
+            });
+
+            // google.accounts.id.prompt()
+        }
+    }, [handleGoogle]);
     const handleSubmit = (event) => {
         event.preventDefault();
         let formData = new FormData(event.currentTarget);
-        dispatch(userSignup(formData, navigate));
+
+        // dispatch(userSignup(formData, navigate));
+    }
+    const getOTP = (phone) => {
+        dispatch(getOTP(phone));
+        setFlag(true);
+    }
+    const handleOTP = () => {
+        // dispatch(otpVerify(otpInput.target.value));
     }
     return (
         <>
@@ -55,10 +91,27 @@ function SignUp() {
                                     Phone No.
                                 </label>
                                 <div className="mt-1">
-                                    <input id="phone" name="phone" type="Number" autoComplete="phone" required className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-kazari-500 focus:border-kazari-500 sm:text-sm"
+                                    <input id="phone" readOnly={readonly} onChange={(e) => e.target.value.length == 10 ? getOTP(e.target.value) : setFlag(false)} name="phone" type="Number" autoComplete="phone" required className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-kazari-500 focus:border-kazari-500 sm:text-sm"
                                     />
                                 </div>
                             </div>
+                            {flag &&
+                                <div>
+                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                                        OTP
+                                    </label>
+                                    <div className="mt-1 relative">
+                                        <input ref={otpInput} id="phone" onChange={(e) => e.target.value.length == 10 ? true : e.target.value = e.target.value.substring(0, 4)} readOnly={readonly} name="otp" type="Number" autoComplete="phone" required className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-kazari-500 focus:border-kazari-500 sm:text-sm"
+                                        />
+                                        <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
+                                            {/* <AiFillQuestionCircle className="h-5" /> */}
+                                            <button onClick={handleOTP} className="inline-flex items-center border focus:border-kazari-500 border-gray-200 rounded px-2 text-sm font-sans font-medium text-gray-600">
+                                                Verify
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
 
                             <div>
                                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
@@ -110,7 +163,7 @@ function SignUp() {
                             </div>
 
                             <div className="mt-6 grid grid-cols-1 gap-3">
-                                <div>
+                                <div className='flex justify-center' id="signUpDiv">
                                     <Link
                                         className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                                     >

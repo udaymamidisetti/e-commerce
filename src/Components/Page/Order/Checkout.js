@@ -27,7 +27,14 @@ export default function Checkout() {
   useEffect(() => {
     dispatch(getAddress());
   }, [dispatch]);
+  useEffect(() => {
+    const body = document.querySelector('#root');
 
+    body.scrollIntoView({
+      behavior: 'smooth'
+    }, 500)
+
+  }, []);
   return (
     <main className="max-w-7xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto lg:max-w-none">

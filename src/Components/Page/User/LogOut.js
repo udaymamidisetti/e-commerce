@@ -1,9 +1,15 @@
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { userLogOut } from '../../Redux/Actions/userActions';
 function Logout() {
-
-    localStorage.removeItem(process.env.REACT_APP_TOKEN);
     const navigate = useNavigate();
-    navigate("/");
+    const dispatch = useDispatch();
+    localStorage.removeItem(process.env.REACT_APP_TOKEN);
+    useEffect(() => {
+        dispatch(userLogOut({ callback: () => navigate("/") }));
+    }, [dispatch])
+    // navigate("/");
     return ("");
 }
 

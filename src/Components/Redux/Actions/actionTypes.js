@@ -7,6 +7,16 @@ export const USER_LOG_IN = "USER_LOG_IN";
 export const USER_LOG_IN_SUCESSS = "USER_LOG_IN_SUCESSS";
 export const USER_LOG_IN_FAILURE = "USER_LOG_IN_FAILURE";
 
+// User Log OUT
+export const USER_LOG_OUT = "USER_LOG_OUT";
+export const USER_LOG_OUT_SUCESSS = "USER_LOG_OUT_SUCESSS";
+export const USER_LOG_OUT_FAILURE = "USER_LOG_OUT_FAILURE";
+
+// User OTP
+export const USER_OTP = "USER_OTP";
+export const USER_OTP_SUCESSS = "USER_OTP_SUCESSS";
+export const USER_OTP_FAILURE = "USER_OTP_FAILURE";
+
 export const STORE_USER_DATA = "STORE_USER_DATA";
 //signup
 export const USER_SIGNUP = "USER_SIGNUP";

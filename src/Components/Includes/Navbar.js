@@ -44,7 +44,7 @@ function Navbar() {
     const userData = useSelector((item) => item.reducer.userData);
     const userFlag = Object.entries(userData).length == 0;
     let userNavigation = [
-        // { name: userData.name, href: '/user/profile' },
+        { name: "Account", href: '/user/profile' },
         { name: 'Orders', href: '/user/orders' },
         { name: 'Wishlist', href: '/user/wishlist' },
         { name: 'Sign out', href: '/log-out' },
@@ -69,6 +69,7 @@ function Navbar() {
         }
         dispatch(getCategory());
     }, [dispatch]);
+
     return (
         <>
             {loading ? <Loader /> :
@@ -128,7 +129,7 @@ function Navbar() {
                                 </button> */}
 
                                         {/* Notofication dropdown */}
-                                        <Menu as="div" className="flex-shrink-0 relative ml-4">
+                                        {/* <Menu as="div" className="flex-shrink-0 relative ml-4">
                                             <div>
                                                 <Menu.Button className="bg-white rounded-full flex focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-kazari-500">
                                                     <span className="sr-only">Open user menu</span>
@@ -150,7 +151,7 @@ function Navbar() {
                                                     </Menu.Items>
                                                 </Transition>
                                             }
-                                        </Menu>
+                                        </Menu> */}
                                         {/* Cart dropdown */}
                                         <Menu as="div" className="flex-shrink-0 relative ml-4">
                                             <div>
@@ -273,7 +274,7 @@ function Navbar() {
                                     ))}
                                 </div>
                                 <div className="border-t border-gray-200 pt-4 pb-3">
-                                    <div className="px-4 flex items-center">
+                                    {/* <div className="px-4 flex items-center">
                                         <div className="flex-shrink-0">
                                             <UserIcon className="h-10 w-10 rounded-full" alt="" />
                                         </div>
@@ -284,7 +285,7 @@ function Navbar() {
                                             <span className="sr-only">View notifications</span>
                                             <BellIcon className="h-6 w-6" aria-hidden="true" />
                                         </button>
-                                    </div>
+                                    </div> */}
                                     <div className="mt-3 px-2 space-y-1">
                                         {userNavigation.map((item, i) => (
                                             <Disclosure.Button

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Logo from './Logo.svg';
 
 function Loader() {

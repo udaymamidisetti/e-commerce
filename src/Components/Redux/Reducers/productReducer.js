@@ -39,6 +39,8 @@ const productReducer = (state = initialState, action) => {
     case ActionTypes.GET_REVIEW_FAILURE:
       return { ...state, loading: false };
 
+    case ActionTypes.USER_LOG_OUT:
+      return { ...state, reviews: [], pagination: { pagesCount: 0, reviewCount: 0 }, loading: false };
     // Review
     case ActionTypes.ADD_REVIEW:
       return { ...state, loading: true };

@@ -20,6 +20,14 @@ function AllProduct() {
     useEffect(() => {
         dispatch(getAllProducts());
     }, [dispatch]);
+    useEffect(() => {
+        const body = document.querySelector('#root');
+
+        body.scrollIntoView({
+            behavior: 'smooth'
+        }, 500)
+
+    }, []);
     const [searchParams, setSearchParams] = useSearchParams();
     // useEffect(() => {
     //     console.log(search, "search");

@@ -36,6 +36,14 @@ function MyOrder() {
     useEffect(() => {
         dispatch(getOrderAllDetails());
     }, [dispatch])
+    useEffect(() => {
+        const body = document.querySelector('#root');
+
+        body.scrollIntoView({
+            behavior: 'smooth'
+        }, 500)
+
+    }, []);
     return (
         <div className="bg-white">
             <div className="max-w-4xl mx-auto py-16 sm:px-6 sm:pt-8 sm:pb-24">

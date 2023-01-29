@@ -118,6 +118,14 @@ function ProductDetails() {
         dispatch(getProduct(id));
         dispatch(getProductAttr(id));
     }, [dispatch])
+    useEffect(() => {
+        const body = document.querySelector('#root');
+
+        body.scrollIntoView({
+            behavior: 'smooth'
+        }, 500)
+
+    }, []);
 
     return (
         <>

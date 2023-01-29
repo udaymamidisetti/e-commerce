@@ -38,6 +38,9 @@ const reducer = (state = initialState, action) => {
     case ActionTypes.USER_LOG_IN_FAILURE:
       return { ...state, loading: false };
 
+    case ActionTypes.USER_LOG_OUT:
+      return { ...state, userData: {}, address: [], addressPagination: { pagesCount: 0, addressCount: 0 }, loading: false };
+
     // Add Address
     case ActionTypes.ADD_ADDRESS:
       return { ...state, loading: true };

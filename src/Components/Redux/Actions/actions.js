@@ -78,7 +78,7 @@ export const payment = (payload, userData, cb) => async () => {
       'token': ActionTypes.BASE_TOKEN
     }
   });
-  const order_id = res.data.data.id;
+  const order_id = res.data.data.response.id;
   const data = res.data.data.order;
 
 

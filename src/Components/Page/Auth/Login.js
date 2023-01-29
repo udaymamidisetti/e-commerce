@@ -4,15 +4,39 @@ import { FcGoogle } from 'react-icons/fc';
 import axios from 'axios';
 import { userLogin, userForgot } from './../../Redux/Actions/userActions';
 import { useNavigate } from 'react-router-dom';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, } from 'react-redux';
 import { toast } from 'react-toastify';
+import useFetch from "../../../hooks/useFetch";
 function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [emailVerify, setEmailVerify] = useState(true);
     const [email, setEmail] = useState("");
     const [forgot, setForgot] = useState(false);
+    const { handleGoogle, loading, error } = useFetch(
+        "http://localhost:5000/api/auth/login-google"
+    );
+
+    useEffect(() => {
+        /* global google */
+        if (window.google) {
+            google.accounts.id.initialize({
+                client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+                callback: handleGoogle,
+            });
+
+            google.accounts.id.renderButton(document.getElementById("loginDiv"), {
+                // type: "standard",
+                theme: "filled_blue",
+                size: "large",
+                text: "signin_with",
+                shape: "rectangular",
+            });
+
+            // google.accounts.id.prompt()
+        }
+    }, [handleGoogle]);
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -25,7 +49,7 @@ function Login() {
         event.preventDefault();
         let formData = new FormData(event.currentTarget);
         try {
-            const res = await axios.post(`${BASE_URL}api/admin/forgot-password`, formData);
+            const res = await axios.post(`${BASE_URL}api/auth/forgot-password`, formData);
             forgot(false);
             toast.success(res.data.message);
         } catch (error) {
@@ -122,7 +146,7 @@ function Login() {
                             </div>
 
                             <div className="mt-6 grid grid-cols-1 gap-3">
-                                <div>
+                                <div className="flex justify-center" id="loginDiv">
                                     <a
                                         className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                                     >
@@ -199,7 +223,7 @@ function Login() {
                             </div>
 
                             <div className="mt-6 grid grid-cols-1 gap-3">
-                                <div>
+                                <div id="loginDiv">
                                     <a
                                         className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                                     >

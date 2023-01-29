@@ -4,6 +4,7 @@ const initialState = {
   orderLoading: false,
   order: {},
   allOrders: [],
+  payment: {}
 };
 
 const orderReducer = (state = initialState, action) => {
@@ -12,9 +13,12 @@ const orderReducer = (state = initialState, action) => {
     case ActionTypes.GET_ORDER:
       return { ...state, loading: true };
     case ActionTypes.GET_ORDER_SUCCESS:
-      return { ...state, order: action.payload, loading: false };
+      return { ...state, order: action.payload.order, payment: action.payload.payment, loading: false };
     case ActionTypes.GET_ORDER_FAILURE:
       return { ...state, loading: false };
+
+    case ActionTypes.USER_LOG_OUT:
+      return { ...state, order: {}, allOrders: [], loading: false };
 
     // Get All Cart
     case ActionTypes.GET_ORDER_ALL_SUCCESS:

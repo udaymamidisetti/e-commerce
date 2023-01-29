@@ -3,7 +3,7 @@ import { TrashIcon } from '@heroicons/react/solid'
 import { Link, useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../Redux/Actions/actionTypes';
 import { FaRupeeSign } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { addQuantity, removeCheckout } from '../../Redux/Actions/checkoutAction';
 import { payment } from '../../Redux/Actions/actions';
@@ -13,50 +13,43 @@ function OrderSummary() {
     const navigate = useNavigate();
     const { checkout, address } = useSelector((item) => item.checkoutReducer);
     const { userData } = useSelector((item) => item.reducer);
-    const setTotalHandle = () => {
+
+    const setTotalHandle = useCallback(() => {
+        let order_items = [];
         let totalPrice = 0;
         let tax = 0;
         let taxTotalPrice = 0;
 
-        checkout.map(({ product, quantity, productAttr }) => {
+        checkout.map(({ product, quantity, productAttr }, i) => {
             if (Object.entries(productAttr).length != 0) {
+                order_items.push({ product: productAttr.product._id, quantity, productAttr: productAttr._id });
+
                 totalPrice += parseFloat(quantity) * parseFloat(productAttr.price);
                 if (product.tax) {
                     tax += (parseFloat(quantity) * parseFloat(productAttr.price)) * (parseFloat(product.tax) / 100);
                 }
             } else {
+                order_items.push({ product: product._id, quantity, productAttr: product._id });
                 totalPrice += parseFloat(quantity) * parseFloat(product.price);
                 if (product.tax) {
                     tax += (parseFloat(quantity) * parseFloat(product.price)) * (parseFloat(product.tax) / 100);
                 }
             }
         })
-        return { totalPrice: parseFloat(totalPrice), tax: parseFloat(tax) };
-    }
-    console.log(setTotalHandle(), "setTotalHandle");
-    // const handleQuantity = (id, prdQuantity) => {
-    //     let temp = quantity;
-    //     temp[id] = parseInt(prdQuantity);
-    //     dispatch(addQuantity(temp));
-    //     // let newTotal = parseInt(total) - (parseInt(e.currentTarget.value) * parseInt(price));
-    //     // setTotal((parseInt(e.currentTarget.value) * parseInt(price)) + parseInt(total));
-    // }
+        taxTotalPrice = parseFloat(totalPrice) + parseFloat(tax);
+        return { totalPrice: parseFloat(totalPrice), tax: parseFloat(tax), taxTotalPrice: parseFloat(totalPrice) + parseFloat(tax), order_items };
+    }, [checkout]);
+    const [totalHandle] = useState(setTotalHandle());
+    console.log(totalHandle);
     const handleCheckoutRemove = (id) => {
         removeCheckout(id);
     }
-    console.log(address, "address");
     const handlePayment = () => {
         if (address == undefined || Object.keys(address).length == 0) {
             toast.error("Please select delivery address or provide delivery address");
             return;
         }
-        let ids = [];
-        checkout.map(({ product }) => {
-            ids.push(product._id);
-        })
-        if (ids) {
-            dispatch(payment({ product: ids, user: userData._id, address }, userData, navigate));
-        }
+        dispatch(payment({ order_items: totalHandle.order_items, user: userData._id, address, price: totalHandle.taxTotalPrice }, userData, navigate));
     }
     return (
         <div className="mt-10 lg:mt-0">
@@ -135,7 +128,7 @@ function OrderSummary() {
                             <div className="flex flex-1 justify-left mt-2 items-center">
                                 <FaRupeeSign className="flex-shrink-0 h-3 w-3 " aria-hidden="true" />
                                 <span href="#" className="ml-1 text-base font-medium">
-                                    {(setTotalHandle().totalPrice).toFixed(2)}
+                                    {(totalHandle.totalPrice).toFixed(2)}
                                 </span>
                             </div></dd>
                     </div>
@@ -145,7 +138,7 @@ function OrderSummary() {
                     </div>
                     <div className="flex items-center justify-between">
                         <dt className="text-sm">Taxes</dt>
-                        <dd className="text-sm font-medium text-gray-900">{(setTotalHandle().tax).toFixed(2)}</dd>
+                        <dd className="text-sm font-medium text-gray-900">{(totalHandle.tax).toFixed(2)}</dd>
                     </div>
                     <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                         <dt className="text-base font-medium">Total</dt>
@@ -153,7 +146,7 @@ function OrderSummary() {
                             <div className="flex flex-1 justify-left mt-2 items-center">
                                 <FaRupeeSign className="flex-shrink-0 h-3 w-3 " aria-hidden="true" />
                                 <span href="#" className="ml-1 text-base font-medium">
-                                    {(setTotalHandle().totalPrice + setTotalHandle().tax).toFixed(2)}
+                                    {(totalHandle.totalPrice + totalHandle.tax).toFixed(2)}
                                 </span>
                             </div>
                         </dd>

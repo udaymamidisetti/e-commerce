@@ -45,7 +45,6 @@ function AddReviewComponent({ id, userData }) {
         console.log("kkdlfklklgfkl");
         dispatch(getReview(id, page))
     }, [page])
-
     return (
         <>
             {!reviewUserFlag &&
@@ -408,11 +407,11 @@ function ProductDetailsView() {
                                     <CheckDelivery />
                                 </div> */}
 
-                                {/* <div className="border-t border-gray-200 mt-10 pt-10">
+                                <div className="border-t border-gray-200 mt-10 pt-10">
                                     <div className=" prose prose-sm text-gray-500">
-                                        <CheckDelivery />
+                                        <CheckDelivery weight={productDetails.weight} />
                                     </div>
-                                </div> */}
+                                </div>
                                 <div className="border-t border-gray-200 mt-10 pt-10">
                                     <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
                                     <div className="mt-4 prose prose-sm text-gray-500" dangerouslySetInnerHTML={{ __html: productDetails.description }}>

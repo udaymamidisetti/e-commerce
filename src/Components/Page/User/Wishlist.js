@@ -25,6 +25,14 @@ function Wishlist() {
             array.push(wishlist[key]);
         }
     }
+    useEffect(() => {
+        const body = document.querySelector('#root');
+
+        body.scrollIntoView({
+            behavior: 'smooth'
+        }, 500)
+
+    }, []);
     const fetchMoreData = () => {
         if ((parseInt(products.length) - parseInt(prd.length)) > 12) {
             let temp = products.slice(prd.length, (prd.length + 12));

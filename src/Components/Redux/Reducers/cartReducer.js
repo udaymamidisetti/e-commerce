@@ -16,6 +16,9 @@ const cartReducer = (state = initialState, action) => {
     case ActionTypes.GET_CART_FAILURE:
       return { ...state, loading: false };
 
+    case ActionTypes.USER_LOG_OUT:
+      return { ...initialState };
+
     //   Add Cart
     case ActionTypes.ADD_CART:
       return { ...state, loading: true };
@@ -31,6 +34,10 @@ const cartReducer = (state = initialState, action) => {
       // let da = temp.filter((t) => t._id !== action.payload)
       return { ...state, cart: state.cart.filter(({ product }) => product._id !== action.payload), itemCount: state.itemCount - 1 }
     // return { ...state, cart: { ...state.cart, course: [...da] }, itemCount: state.itemCount - 1 }
+
+    case ActionTypes.USER_LOG_OUT:
+      return { ...state, cart: [], loading: false };
+
 
     default:
       return state;

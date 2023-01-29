@@ -2,29 +2,37 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import { AiFillQuestionCircle } from "react-icons/ai";
 
-function CheckDelivery() {
+function CheckDelivery({ weight }) {
     const [check, setCheck] = useState({ status: null, message: "" });
     const input = useRef();
     const handleCheck = async () => {
         try {
-            if ((input.current.value).length != 6) {
-                return;
+            if (!Number.isInteger(weight)) {
+                weight = 0.5;
             }
-
-            const { data } = await axios.get(`https://track.delhivery.com/c/api/pin-codes/json`, {
-                params: {
-                    // token: process.env.REACT_APP_DELHIVERY_API_TOKEN,
-                    token: "4d4ae9418db6a7f77d508dca77a2b6f3ce6cde75",
-                    filter_codes: input.current.value
-                }
+            var data = JSON.stringify({
+                pickup_postcode: "411005",
+                delivery_postcode: input.current.value,
+                weight: weight,
             });
-            if ((data.delivery_codes).length == 0) {
-                setCheck({ status: false, message: `Delivery not available to ${input.current.value}` })
-            } else {
-                setCheck({ status: true, message: `Delivery available to ${input.current.value}` })
 
+            var config = {
+                method: 'post',
+                url: `${process.env.REACT_APP_BASE_URL}api/address/check-delivery`,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const response = await axios(config);
+            if (response.data.status === 200) {
+                setCheck({ status: true, message: `Delivery available to ${input.current.value}` })
+            } else {
+                setCheck({ status: false, message: `Delivery not available to ${input.current.value}` })
             }
         } catch (error) {
+            setCheck({ status: false, message: `Delivery not available to ${input.current.value}` })
             console.log(`error occured =>  ${error.message}`);
         }
     }
@@ -39,7 +47,7 @@ function CheckDelivery() {
                     type="Number"
                     name="search"
                     maxLength={6}
-                    onKeyUp={handleLength}
+                    onChange={(e) => e.currentTarget.value.length == 6 ? e.currentTarget.value : e.currentTarget.value = e.currentTarget.value.substr(0, 6)}
                     id="search"
                     ref={input}
                     placeholder="Enter Delivery Pincode"
