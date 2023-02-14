@@ -15,7 +15,7 @@ function Login() {
     const [email, setEmail] = useState("");
     const [forgot, setForgot] = useState(false);
     const { handleGoogle, loading, error } = useFetch(
-        "http://localhost:5000/api/auth/login-google"
+        `${BASE_URL}api/auth/login-google`
     );
 
     useEffect(() => {

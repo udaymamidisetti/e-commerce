@@ -13,7 +13,7 @@ function SignUp() {
     const [readonly, setReadonly] = useState(false);
     const dispatch = useDispatch();
     const { handleGoogle, loading, error } = useFetch(
-        "http://localhost:5000/api/auth/sign-up-google"
+        `${BASE_URL}api/auth/sign-up-google`
     );
     useEffect(() => {
         /* global google */
