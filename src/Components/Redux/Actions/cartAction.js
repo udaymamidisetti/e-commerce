@@ -11,7 +11,7 @@ export const getCart = () => async (dispatch) => {
       headers: {
         'token': ActionTypes.BASE_TOKEN
       }
-    },);
+    });
     const data = res.data.data;
     dispatch({
       type: ActionTypes.GET_CART_SUCCESS,
@@ -24,10 +24,10 @@ export const getCart = () => async (dispatch) => {
 
 export const addCart = (payload) => async (dispatch) => {
   dispatch({ type: ActionTypes.ADD_CART });
+  let { product, quantity, productAttr: selectedSize } = payload;
   let url = `${ActionTypes.BASE_URL}api/cart`;
   try {
-    // done bro
-    const res = await axios.post(url, { product: payload }, {
+    const res = await axios.post(url, { product, quantity: 1, productAttr: selectedSize }, {
       headers: {
         'token': ActionTypes.BASE_TOKEN
       }

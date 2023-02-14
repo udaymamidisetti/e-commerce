@@ -5,23 +5,50 @@ import { FaRupeeSign } from 'react-icons/fa';
 import { deleteCartItem, changeQuantity } from './../../Redux/Actions/cartAction';
 import { Link, useNavigate } from 'react-router-dom';
 import { addCheckoutCart } from '../../Redux/Actions/checkoutAction';
+import { useCallback } from 'react';
 
 
 export default function Cart() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { cart } = useSelector((item) => item.cartReducer);
+    const setTotalHandle = useCallback(() => {
+        let order_items = [];
+        let totalPrice = 0;
+        let tax = 0;
+        let taxTotalPrice = 0;
+
+        cart.map(({ product, quantity, productAttr }, i) => {
+            if (Object.entries(productAttr).length != 0) {
+                order_items.push({ product: productAttr.product._id, quantity, productAttr: productAttr._id });
+
+                totalPrice += parseFloat(quantity) * parseFloat(productAttr.price);
+                if (product.tax) {
+                    tax += (parseFloat(quantity) * parseFloat(productAttr.price)) * (parseFloat(product.tax) / 100);
+                }
+            } else {
+                order_items.push({ product: product._id, quantity, productAttr: product._id });
+                totalPrice += parseFloat(quantity) * parseFloat(product.price);
+                if (product.tax) {
+                    tax += (parseFloat(quantity) * parseFloat(product.price)) * (parseFloat(product.tax) / 100);
+                }
+            }
+        })
+        taxTotalPrice = parseFloat(totalPrice) + parseFloat(tax);
+        return { totalPrice: parseFloat(totalPrice), tax: parseFloat(tax), taxTotalPrice: parseFloat(totalPrice) + parseFloat(tax), order_items };
+    }, [checkout]);
+    const [totalHandle] = useState(setTotalHandle());
     const handleQuantityChange = (e, id) => {
 
     }
     const handleRemove = (id) => {
         dispatch(deleteCartItem(id));
     }
-    const { cart } = useSelector((item) => item.cartReducer);
+
     const proceedCheckout = () => {
         console.log("proceedCheckout");
         dispatch(addCheckoutCart(navigate));
-
     }
     return (
         <div className="bg-white">
@@ -33,7 +60,7 @@ export default function Cart() {
                         <h2 className="sr-only">Items in your shopping cart</h2>
 
                         <ul role="list" className="border-t border-b overflow-y-auto h-[50vh] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-10 pr-5 border-gray-200 divide-y divide-gray-200">
-                            {cart.length !== 0 && cart.map(({ product, quantity }, i) => (
+                            {cart.length !== 0 && cart.map(({ product, quantity, productAttr }, i) => (
                                 <li key={i} className="flex items-center py-2 sm:py-2">
                                     <div className="flex-shrink-0">
                                         <img src={BASE_URL + product.thumbnail} alt={product.name + " image"} className="w-24 h-24 rounded-lg object-center object-cover sm:w-32 sm:h-32" />

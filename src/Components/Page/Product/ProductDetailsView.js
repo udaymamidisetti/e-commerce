@@ -198,11 +198,11 @@ function ProductDetailsView() {
     const wishlistFlag = false;
     const { userData } = useSelector((item) => item.reducer);
     const userFlag = Object.entries(userData).length == 0;
-    const handleCart = (id) => {
+    const handleCart = (product) => {
         if (userFlag) {
             navigate("/login");
         }
-        dispatch(addCart(id));
+        dispatch(addCart({ product, quantity: 1, productAttr: selectedSize }));
     }
     const handleCheckout = (product) => {
         // console.log(id, "id");
@@ -398,7 +398,7 @@ function ProductDetailsView() {
                                     <button
                                         type="button"
                                         className="w-full bg-kazari-50 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-kazari-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-kazari-500"
-                                        onClick={() => handleCart(productDetails._id)}
+                                        onClick={() => handleCart(productDetails)}
                                     >
                                         Add to Cart
                                     </button>
