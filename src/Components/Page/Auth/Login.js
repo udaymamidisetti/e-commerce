@@ -15,7 +15,7 @@ function Login() {
     const [email, setEmail] = useState("");
     const [forgot, setForgot] = useState(false);
     const { handleGoogle, loading, error } = useFetch(
-        `${BASE_URL}api/auth/login-google`
+        `${process.env.REACT_APP_BASE_URL}api/auth/login-google`
     );
 
     useEffect(() => {
@@ -49,7 +49,7 @@ function Login() {
         event.preventDefault();
         let formData = new FormData(event.currentTarget);
         try {
-            const res = await axios.post(`${BASE_URL}api/auth/forgot-password`, formData);
+            const res = await axios.post(`${process.env.REACT_APP_BASE_URL}api/auth/forgot-password`, formData);
             forgot(false);
             toast.success(res.data.message);
         } catch (error) {

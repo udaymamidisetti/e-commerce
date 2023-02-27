@@ -5,7 +5,7 @@ import { BASE_URL } from '../../Redux/Actions/actionTypes';
 import { FaRupeeSign } from 'react-icons/fa';
 import { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { addQuantity, removeCheckout } from '../../Redux/Actions/checkoutAction';
+import { addQuantity } from '../../Redux/Actions/checkoutAction';
 import { payment } from '../../Redux/Actions/actions';
 import { toast } from 'react-toastify';
 function OrderSummary() {
@@ -21,8 +21,10 @@ function OrderSummary() {
         let taxTotalPrice = 0;
 
         checkout.map(({ product, quantity, productAttr }, i) => {
+
+            console.log({ product, quantity, productAttr }, "{ product, quantity, productAttr }", i);
             if (Object.entries(productAttr).length != 0) {
-                order_items.push({ product: productAttr.product._id, quantity, productAttr: productAttr._id });
+                order_items.push({ product: productAttr?.product?._id, quantity, productAttr: productAttr?._id });
 
                 totalPrice += parseFloat(quantity) * parseFloat(productAttr.price);
                 if (product.tax) {
@@ -40,9 +42,8 @@ function OrderSummary() {
         return { totalPrice: parseFloat(totalPrice), tax: parseFloat(tax), taxTotalPrice: parseFloat(totalPrice) + parseFloat(tax), order_items };
     }, [checkout]);
     const [totalHandle] = useState(setTotalHandle());
-    console.log(totalHandle);
-    const handleCheckoutRemove = (id) => {
-        removeCheckout(id);
+    const handleQuantityChange = (e, productId, cartId) => {
+        dispatch(changeQuantity(e.target.value, productId, cartId));
     }
     const handlePayment = () => {
         if (address == undefined || Object.keys(address).length == 0) {
@@ -101,6 +102,7 @@ function OrderSummary() {
                                             id="quantity"
                                             name="quantity"
                                             className="rounded-md border border-gray-300 text-base font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-kazari-500 focus:border-kazari-500 sm:text-sm"
+                                            onChange={(e) => (e, product._id, checkout._id)}
                                         >
                                             {Array.from({ length: 10 }).map((item, i) => {
                                                 if (i == 0) {

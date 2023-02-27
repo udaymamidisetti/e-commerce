@@ -42,7 +42,6 @@ function AddReviewComponent({ id, userData }) {
         setReviewFlag(false);
     }
     useEffect(() => {
-        console.log("kkdlfklklgfkl");
         dispatch(getReview(id, page))
     }, [page])
     return (
@@ -205,7 +204,6 @@ function ProductDetailsView() {
         dispatch(addCart({ product, quantity: 1, productAttr: selectedSize }));
     }
     const handleCheckout = (product) => {
-        // console.log(id, "id");
         if (userFlag) {
             navigate("/login");
         }

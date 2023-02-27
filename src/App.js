@@ -11,6 +11,9 @@ import RouteComponent from './Components/Routes/Routes';
 import { ErrorBoundary } from 'react-error-boundary'
 import Error from "./Components/Common/Error";
 import { getAllProducts } from './Components/Redux/Actions/productAction';
+import axios from "axios";
+import { BASE_TOKEN } from "./Components/Redux/Actions/actionTypes";
+
 function loadScript(src) {
   const script = document.createElement("script");
   script.src = src;
@@ -31,6 +34,7 @@ function App() {
     setSearchParams(searchParams);
     toast.success("Email verified successfully");
   }
+  axios.defaults.headers.common['token'] = BASE_TOKEN;
   loadScript("https://checkout.razorpay.com/v1/checkout.js");
   const dispatch = useDispatch();
   useEffect(() => {

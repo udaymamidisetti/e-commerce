@@ -33,10 +33,13 @@ const checkoutReducer = (state = initialState, action) => {
     case ActionTypes.ADD_CHECKOUT_CART_FAILURE:
       return { ...state, loading: false };
 
-    case ActionTypes.REMOVE_CHECKOUT_SUCCESS:
-      let temp = state.checkout;
-      temp = temp.filter((item) => item.product._id != action.payload);
-      return { ...state, checkout: temp, loading: false };
+    case ActionTypes.DELETE_CHECKOUT:
+      return { ...state, loading: true };
+    case ActionTypes.DELETE_CHECKOUT_SUCCESS:
+      return { ...state, loading: false, checkout: action.payload };
+    case ActionTypes.DELETE_CHECKOUT_FAILURE:
+      return { ...state, loading: false };
+
     default:
       return state;
   }

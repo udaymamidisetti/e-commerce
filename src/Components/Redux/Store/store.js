@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import rootReducer from "../Reducers/rootReducer";
 let store = "";
-if (process.env.REACT_APP_ENVIRONMENT === 'PROD') {
+if (process.env.REACT_APP_ENVIRONMENT === 'PROD' || process.env.REACT_APP_ENVIRONMENT === 'DEV') {
   store = createStore(
     rootReducer,
     compose(

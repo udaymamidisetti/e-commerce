@@ -13,7 +13,7 @@ function SignUp() {
     const [readonly, setReadonly] = useState(false);
     const dispatch = useDispatch();
     const { handleGoogle, loading, error } = useFetch(
-        `${BASE_URL}api/auth/sign-up-google`
+        `${process.env.REACT_APP_BASE_URL}api/auth/sign-up-google`
     );
     useEffect(() => {
         /* global google */
@@ -30,8 +30,6 @@ function SignUp() {
                 text: "continue_with",
                 shape: "rectangular",
             });
-
-            // google.accounts.id.prompt()
         }
     }, [handleGoogle]);
     const handleSubmit = (event) => {
