@@ -6,11 +6,23 @@ import { ToastContainer, toast } from "react-toastify";
 import reportWebVitals from './reportWebVitals';
 import { Provider } from "react-redux";
 import store from "./Components/Redux/Store/store";
+import 'react-toastify/dist/ReactToastify.css';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <Provider store={store}>
-      <ToastContainer />
+      <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+
+      />
       <App />
     </Provider >
   </BrowserRouter>

@@ -40,6 +40,13 @@ const checkoutReducer = (state = initialState, action) => {
     case ActionTypes.DELETE_CHECKOUT_FAILURE:
       return { ...state, loading: false };
 
+    case ActionTypes.CHANGE_CART_QUANTITY:
+      return { ...state, loading: true };
+    case ActionTypes.CHANGE_CART_QUANTITY_SUCCESS:
+      return { ...state, loading: false, checkout: action.payload };
+    case ActionTypes.CHANGE_CART_QUANTITY_FAILURE:
+      return { ...state, loading: false };
+
     default:
       return state;
   }

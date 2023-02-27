@@ -2,7 +2,7 @@
 import { Routes, Route, useSearchParams, Outlet, Navigate } from "react-router-dom";
 import './index.css';
 import "./carousel.min.css";
-import 'react-toastify/dist/ReactToastify.css';
+
 import { toast } from 'react-toastify';
 
 import { useDispatch } from 'react-redux';

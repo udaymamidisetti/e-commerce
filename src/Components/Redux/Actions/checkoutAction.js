@@ -35,17 +35,12 @@ export const changeQuantity = (quantity, productId, cartId) =>
     dispatch({ type: ActionTypes.CHANGE_CART_QUANTITY });
     let url = `${ActionTypes.BASE_URL}api/cart/${cartId}`;
     try {
-      let checkout = state().cartReducer.checkout;
-      checkout = checkout.map(item => ({ ...item, order_items: item.order_items.map(it => it.product._id == productId ? { ...it, quantity: parseInt(quantity) } : it) }))
-      // const res = await axios.put(url, { cart_items: cart[0].cart_items }, {
-      //   headers: {
-      //     'token': ActionTypes.BASE_TOKEN
-      //   }
-      // });
-      dispatch({ type: ActionTypes.DELETE_CHECKOUT_SUCCESS, payload: checkout });
+      let checkout = state().checkoutReducer.checkout;
+      checkout = checkout.map(it => it.product._id == productId ? { ...it, quantity: parseInt(quantity) } : it);
+      dispatch({ type: ActionTypes.CHANGE_CART_QUANTITY_SUCCESS, payload: checkout });
     } catch (error) {
       console.log(error)
-      dispatch({ type: ActionTypes.DELETE_CHECKOUT_FAILURE });
+      dispatch({ type: ActionTypes.CHANGE_CART_QUANTITY_FAILURE });
     }
   }
 export const deleteCheckoutItem = (productID, cartID) => {
@@ -54,12 +49,7 @@ export const deleteCheckoutItem = (productID, cartID) => {
     // let url = `${ActionTypes.BASE_URL}api/cart/${cartID}`;
     try {
       let checkout = state().checkoutReducer.checkout;
-      checkout = checkout.map(item => ({ ...item, order_items: item.order_items.filter(it => it.product._id != productID) }))
-      // const res = await axios.put(url, { order_items: checkout[0].order_items }, {
-      //   headers: {
-      //     'token': ActionTypes.BASE_TOKEN
-      //   }
-      // });
+      checkout = checkout.filter(it => it.product._id != productID);
       dispatch({ type: ActionTypes.DELETE_CHECKOUT_SUCCESS, payload: checkout });
     } catch (error) {
       console.log(error)

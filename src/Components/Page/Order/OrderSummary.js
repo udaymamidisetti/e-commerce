@@ -5,7 +5,7 @@ import { BASE_URL } from '../../Redux/Actions/actionTypes';
 import { FaRupeeSign } from 'react-icons/fa';
 import { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { addQuantity } from '../../Redux/Actions/checkoutAction';
+import { addQuantity, changeQuantity, deleteCheckoutItem } from '../../Redux/Actions/checkoutAction';
 import { payment } from '../../Redux/Actions/actions';
 import { toast } from 'react-toastify';
 function OrderSummary() {
@@ -13,16 +13,19 @@ function OrderSummary() {
     const navigate = useNavigate();
     const { checkout, address } = useSelector((item) => item.checkoutReducer);
     const { userData } = useSelector((item) => item.reducer);
-
-    const setTotalHandle = useCallback(() => {
+    console.log(checkout, "checkout");
+    useEffect(() => {
+        if (checkout.length == 0) {
+            navigate("/products");
+        }
+    }, [])
+    const setTotalHandle = () => {
         let order_items = [];
         let totalPrice = 0;
         let tax = 0;
         let taxTotalPrice = 0;
-
         checkout.map(({ product, quantity, productAttr }, i) => {
-
-            console.log({ product, quantity, productAttr }, "{ product, quantity, productAttr }", i);
+            // console.log({ product, quantity, productAttr }, "{ product, quantity, productAttr }", i);
             if (Object.entries(productAttr).length != 0) {
                 order_items.push({ product: productAttr?.product?._id, quantity, productAttr: productAttr?._id });
 
@@ -40,16 +43,20 @@ function OrderSummary() {
         })
         taxTotalPrice = parseFloat(totalPrice) + parseFloat(tax);
         return { totalPrice: parseFloat(totalPrice), tax: parseFloat(tax), taxTotalPrice: parseFloat(totalPrice) + parseFloat(tax), order_items };
-    }, [checkout]);
-    const [totalHandle] = useState(setTotalHandle());
+    };
+    const totalHandle = setTotalHandle();
     const handleQuantityChange = (e, productId, cartId) => {
         dispatch(changeQuantity(e.target.value, productId, cartId));
     }
+    const handleCheckoutRemove = (id, cartID) => {
+        dispatch(deleteCheckoutItem(id, cartID));
+    }
     const handlePayment = () => {
-        if (address == undefined || Object.keys(address).length == 0) {
+        if (Object.keys(address).length === 0) {
             toast.error("Please select delivery address or provide delivery address");
             return;
         }
+
         dispatch(payment({ order_items: totalHandle.order_items, user: userData._id, address, price: totalHandle.taxTotalPrice }, userData, navigate));
     }
     return (
@@ -78,7 +85,7 @@ function OrderSummary() {
                                     <div className="ml-4 flex-shrink-0 flow-root">
                                         <button
                                             type="button"
-                                            onClick={() => handleCheckoutRemove(product._id)}
+                                            onClick={() => handleCheckoutRemove(product._id, checkout._id)}
                                             className="-m-2.5 bg-white p-2.5 flex items-center justify-center text-gray-400 hover:text-gray-500"
                                         >
                                             <span className="sr-only">Remove</span>
@@ -102,7 +109,7 @@ function OrderSummary() {
                                             id="quantity"
                                             name="quantity"
                                             className="rounded-md border border-gray-300 text-base font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-kazari-500 focus:border-kazari-500 sm:text-sm"
-                                            onChange={(e) => (e, product._id, checkout._id)}
+                                            onChange={(e) => handleQuantityChange(e, product._id, checkout._id)}
                                         >
                                             {Array.from({ length: 10 }).map((item, i) => {
                                                 if (i == 0) {

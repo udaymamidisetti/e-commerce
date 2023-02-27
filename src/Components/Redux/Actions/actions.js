@@ -2,6 +2,8 @@ import * as ActionTypes from "./actionTypes";
 import axios from "axios";
 import Logo from '../../Common/Logo.svg';
 import { getCart } from './cartAction';
+import { addCheckout } from './checkoutAction';
+import { toast } from "react-toastify";
 
 export const storeUserData = (data) => async (dispatch) => {
   try {
@@ -72,7 +74,8 @@ export const addAddress = (payload, id) => async (dispatch) => {
   }
 };
 
-export const payment = (payload, userData, cb) => async (dispatch) => {
+export const payment = (payload, userData, cb) => async (dispatch, state) => {
+
   let url = `${ActionTypes.BASE_URL}api/order`;
   const res = await axios.post(url, payload, {
     headers: {
