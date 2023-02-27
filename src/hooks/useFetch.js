@@ -33,38 +33,6 @@ const useFetch = (url) => {
             }
             console.log(`error occured =>  ${error.message}`);
         }
-        // fetch(url, {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-
-        //     body: JSON.stringify({ credential: response.credential }),
-        // }).then((res) => {
-        //     setLoading(false);
-        //     const data = res.data;
-        //     console.log(res);
-        //     if (res.status === 200) {
-        //         if (!data.login) {
-        //             callback("/login");
-        //         }
-        //         localStorage.setItem(process.env.REACT_APP_TOKEN, res.data.token);
-        //         callback("/");
-        //         dispatch({ type: ActionTypes.USER_LOG_IN_SUCESSS, payload: res.data.data });
-        //         toast.success(res.data.message);
-        //     }
-        //     return res.json();
-        // }).catch((error) => {
-        //     console.log(error);
-        //     toast.error(error.response.data.message);
-        //     dispatch({ type: ActionTypes.USER_LOG_IN_FAILURE });
-
-        //     if (error.response.data.message == "User not found") {
-        //         callback("/sign-up");
-        //     }
-        //     console.log(`error occured =>  ${error?.message}`);
-        //     setError(error?.message);
-        // });
     };
     return { loading, error, handleGoogle };
 };
