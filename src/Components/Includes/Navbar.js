@@ -69,7 +69,8 @@ function Navbar() {
         }
         dispatch(getCategory());
     }, [dispatch]);
-
+    console.log(cart, "cart");
+    console.log(cart[0]?.cart_items.length, "cart[0]?.cart_items.length");
     return (
         <>
             {loading ? <Loader /> :
@@ -158,7 +159,7 @@ function Navbar() {
                                                 <Menu.Button className="bg-white rounded-full flex focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-kazari-500">
                                                     <span className="sr-only">Open user menu</span>
 
-                                                    {itemCount ? <span className=" absolute -top-1 left-0 items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-kazari-100 text-white"> {itemCount} </span> : ""}<ShoppingCartIcon onClick={checkLogin} className="h-8 w-8 p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-full" alt="" />
+                                                    {cart.length != 0 ? <span className=" absolute -top-1 left-0 items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-kazari-100 text-white"> {cart[0]?.cart_items.length} </span> : ""}<ShoppingCartIcon onClick={checkLogin} className="h-8 w-8 p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-full" alt="" />
                                                 </Menu.Button>
                                             </div>
                                             {(userFlag) ? "" :
