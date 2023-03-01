@@ -30,14 +30,14 @@ const navigation = {
             name: 'Facebook',
             href: 'https://www.facebook.com/kazaricollection',
             icon: (props) => (
-                <FaInstagram {...props} />
+                <FaFacebook  {...props} />
             ),
         },
         {
             name: 'Instagram',
             href: 'https://www.instagram.com/kazari.collection/',
             icon: (props) => (
-                <FaFacebook {...props} />
+                <FaInstagram {...props} />
             ),
         },
         {
