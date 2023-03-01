@@ -135,7 +135,7 @@ const RoutesData = [
     },
     {
         path: "/personalized",
-        exact: false,
+        exact: true,
         name: "404 Not Found",
         element: <NotFOund />,
         private: false,
