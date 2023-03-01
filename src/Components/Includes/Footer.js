@@ -175,10 +175,10 @@ function Footer() {
                 <div className="mt-8 border-t border-gray-700 pt-8 md:flex md:items-center md:justify-between">
                     <div className="flex space-x-6 md:order-2">
                         {navigation.social.map((item, i) => (
-                            <Link key={i} to={item.href} className="text-gray-400 hover:text-gray-300">
+                            <a key={i} to={item.href} className="text-gray-400 hover:text-gray-300">
                                 <span className="sr-only">{item.name}</span>
                                 <item.icon className="h-6 w-6" aria-hidden="true" />
-                            </Link>
+                            </a>
                         ))}
                     </div>
                     <p className="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
