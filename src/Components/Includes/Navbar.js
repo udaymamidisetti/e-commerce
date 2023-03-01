@@ -240,7 +240,7 @@ function Navbar() {
                                         Home
                                     </Link>
                                     <CategoriesTab />
-                                    <Link
+                                    {/* <Link
                                         key={"PERSONALIZED"}
                                         // onClick={() => navigate("/products")}
                                         to={"/personalized"}
@@ -250,8 +250,8 @@ function Navbar() {
                                         )}
 
                                     >
-                                        PERSONALIZED
-                                    </Link>
+                                        Personalized
+                                    </Link> */}
                                 </nav>
                             </div>
 
