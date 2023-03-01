@@ -20,7 +20,6 @@ const Disclaimer = lazy(() => import('./../Page/Organisation/Disclaimer'));
 const AboutUs = lazy(() => import('./../Page/Organisation/AboutUs'));
 const ReturnPolicy = lazy(() => import('./../Page/Organisation/ReturnPolicy'));
 
-
 const RoutesData = [
     {
         path: "/",
@@ -132,6 +131,13 @@ const RoutesData = [
         exact: true,
         name: "Return Policy",
         element: <Suspense fallback={<Loader />}><ReturnPolicy /></Suspense>,
+        private: false,
+    },
+    {
+        path: "/personalized",
+        exact: false,
+        name: "404 Not Found",
+        element: <NotFOund />,
         private: false,
     },
     {
